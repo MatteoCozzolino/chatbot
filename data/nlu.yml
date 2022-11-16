@@ -1,0 +1,97 @@
+version: "3.1"
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - ciao
+    - buongiorno
+    - buonasera
+    - buon pomeriggio
+    - yo
+    - salve
+    - salute
+    - hello
+    - hi
+- intent: goodbye
+  examples: |
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+- intent: affirm
+  examples: |
+    - yes
+    - y
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+- intent: deny
+  examples: |
+    - no
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+- intent: course_selected #TODO fix dopo action
+  examples: |
+    - code 1
+    - code 2
+    - code 3
+    - code 4
+    - code 5
+- intent: course_access
+  examples: |
+    - course_access
+    - access
+    - accesso
+    - corso
+    - fammi accedere ad un corso
+    - accesso ai corsi
+    - dammi la lista dei corsi
+    - lista corsi
+- intent: lessons_list
+  examples: |
+    - lessons_list
+    - lezione
+    - dammi la lista delle lezioni
+    - lista
+- intent: lesson_selected #TODO fix dopo action
+  examples: |
+    - code 1 lez 2
+    - code 2 lez 34
+    - code 3 lez 54
+    - code 3 lez 3
+    - code 2 lez 9
+    - code 1 lez 10
+    - code 2 lez 12
+- intent: course_info
+  examples: |
+    - course_info
+    - informazioni
+    - info
+    - corso
+    - dammi le informazioni
+    - info corsi
+    - dammi la lista dei corsi
+    - lista corsi
+    - dammi le info
+    - dammi le info su un corso
+- intent: course_ask
+  examples: |
+    - course available
+    - quali sono i corsi?
+    - corsi disponibili
+    - corsi
+    - che corsi ci sono
+    - quali corsi
+    - che corsi
+    - quali sono i corsi disponibili

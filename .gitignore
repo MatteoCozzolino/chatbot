@@ -1,0 +1,4 @@
+.rasa/cache/
+*.pkl
+*.json
+models/

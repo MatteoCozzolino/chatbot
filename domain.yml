@@ -1,0 +1,46 @@
+version: '3.1'
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+intents:
+- affirm
+- course_access
+- course_ask
+- course_info
+- course_selected
+- deny
+- goodbye
+- greet
+- lesson_selected
+- lessons_list
+#entities:
+#  - course
+#  - lesson
+responses:
+  utter_goodbye:
+  - text: Bye
+  utter_welcome:
+  - text: Ciao, come posso aiutarti?
+    buttons:
+    - title: Accedi al corso
+      payload: /course_access
+    - title: Lezioni da svolgere
+      payload: /lessons_list
+    - title: Informazioni su un corso
+      payload: /course_info
+  utter_course_selection:
+  - text: A quale corso vuoi accedere?
+  utter_course_info_selection:
+  - text: Per quale corso vuoi ricevere informazioni?
+  utter_show_courses: #TODO action?
+  - text: Ecco i corsi disponibili
+    buttons:
+    - title: Code 1
+    - title: Code 2
+    - title: Code 3
+  utter_lessons_list: #TODO action?
+  - text: custom action con la lista
+actions:
+- action_get_courses_list
+- action_get_course_info
+- action_get_link
