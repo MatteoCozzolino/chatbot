@@ -12,6 +12,11 @@ nlu:
     - salute
     - hello
     - hi
+    - ho bisogno di aiuto con i corsi
+    - ho bisogno di aiuto
+    - aiuto
+    - help
+    - mi serve supporto
 - intent: goodbye
   examples: |
     - cu
@@ -28,19 +33,17 @@ nlu:
   examples: |
     - yes
     - y
-    - indeed
-    - of course
-    - that sounds good
-    - correct
+    - corretto
+    - si
+    - certo
+    - ok
+    - k
 - intent: deny
   examples: |
     - no
     - n
-    - never
-    - I don't think so
-    - don't like that
-    - no way
-    - not really
+    - no grazie
+    - non ora
 - intent: course_selected #TODO fix dopo action
   examples: |
     - code 1

@@ -1,9 +1,12 @@
 version: "3.1"
 
 rules:
-
-- rule: Say goodbye anytime the user says goodbye
+- rule: Mostra le opzioni di conversazione se l'utente le richiede
   steps:
-  - intent: goodbye
-  - action: utter_goodbye
+  - intent: affirm
+  - action: utter_conversation_choices
 
+- rule: Termina la conversazione
+  steps:
+  - intent: deny
+  - action: utter_goodbye

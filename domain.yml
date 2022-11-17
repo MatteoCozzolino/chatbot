@@ -18,9 +18,13 @@ intents:
 #  - lesson
 responses:
   utter_goodbye:
-  - text: Bye
+  - text: Va bene, sono qui se ti serve aiuto!
   utter_welcome:
   - text: Ciao, come posso aiutarti?
+  utter_choices_fallback:
+  - text: Hai bisogno di altro?
+  utter_conversation_choices:
+  - text: ""
     buttons:
     - title: Accedi al corso
       payload: /course_access
