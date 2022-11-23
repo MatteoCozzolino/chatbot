@@ -36,7 +36,7 @@ class ActionGetCourseInfo(Action):
              tracker: Tracker,
              domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        dispatcher.utter_message(text= 'info del corso') #TODO info da estrarre da db
+        dispatcher.utter_message(text= 'info del corso ' + tracker.get_slot('course')) #TODO info da estrarre da db, creare buttons con title = nome corso da DB
 
         return []
 

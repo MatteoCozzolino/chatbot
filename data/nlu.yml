@@ -46,11 +46,10 @@ nlu:
     - non ora
 - intent: course_selected #TODO fix dopo action
   examples: |
-    - code 1
-    - code 2
-    - code 3
-    - code 4
-    - code 5
+    - [code 1]{"entity": "course"}
+    - [code 2]{"entity": "course"}
+    - [code 3]{"entity": "course"}
+    - [code 4]{"entity": "course"}
 - intent: course_access
   examples: |
     - course_access
