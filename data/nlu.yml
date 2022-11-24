@@ -97,3 +97,9 @@ nlu:
     - quali corsi
     - che corsi
     - quali sono i corsi disponibili
+- intent: ask_remind
+  examples: |
+    - ricordami le lezioni
+    - ricordami
+    - ricordami di finire 
+    - ricordami di finire le lezioni

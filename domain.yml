@@ -13,6 +13,10 @@ intents:
 - greet
 - lesson_selected
 - lessons_list
+- ask_remind:
+    trigger: action_set_reminder
+- EXTERNAL_reminder:
+    trigger: action_react_to_reminder
 entities:
   - course
   - lesson
@@ -58,3 +62,5 @@ actions:
 - action_get_courses_list
 - action_get_course_info
 - action_get_link
+- action_set_reminder
+- action_react_to_reminder

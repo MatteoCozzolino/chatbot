@@ -8,9 +8,10 @@
 # This is a simple example for a custom action which utters "Hello World!"
 
 from typing import Any, Text, Dict, List
-
+from datetime import datetime, timedelta
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
+from rasa_sdk.events import ReminderScheduled
 
 class ActionGetCoursesList(Action):
 
@@ -50,5 +51,46 @@ class ActionGetLink(Action):
              domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
         dispatcher.utter_message(text= 'link del corso') #TODO info da estrarre da db
+
+        return []
+
+class ActionSetReminder(Action):
+
+    def name(self) -> Text:
+        return "action_set_reminder"
+
+    async def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+
+        dispatcher.utter_message("Te lo ricordo tra 5 secondi")
+
+        date = datetime.now() + timedelta(seconds=5)
+
+        reminder = ReminderScheduled(
+            "EXTERNAL_reminder",
+            trigger_date_time=date,
+            name="my_reminder",
+            kill_on_user_message=False,
+        )
+
+        return [reminder]
+
+class ActionReactToReminder(Action):
+
+    def name(self) -> Text:
+        return "action_react_to_reminder"
+
+    async def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+
+        dispatcher.utter_message("Ricordati di finire la lezione")
 
         return []
