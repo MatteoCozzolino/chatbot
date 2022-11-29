@@ -22,7 +22,7 @@ class ActionGetCoursesList(Action):
              tracker: Tracker,
              domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        f = open(".\\courses_list.txt", "r")    #TODO da implementare con db
+    f = open(".\\courses_list.txt", "r")    #TODO da implementare con db
 
         dispatcher.utter_message(text=f.read())
 
