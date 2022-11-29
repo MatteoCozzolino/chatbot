@@ -20,20 +20,17 @@ stories:
   - intent: lesson_selected
   - action: action_get_link
   - action: utter_choices_fallback
-- story: utente chiede informazioni su un corso 
+- story : utente conosce il corso
   steps:
   - intent: course_info
   - action: utter_course_info_selection
-  - checkpoint : course_selection
-- story : utente conosce il corso
-  steps:
-  - checkpoint : course_selection
   - intent: course_selected
   - action: action_get_course_info
   - action: utter_choices_fallback
 - story: utente non conosce i corsi
   steps:
-  - checkpoint : course_selection
+  - intent: course_info
+  - action: utter_course_info_selection
   - intent: course_ask
   - action: utter_show_courses
   - intent: course_selected

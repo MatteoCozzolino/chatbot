@@ -1,32 +1,67 @@
 # This files contains your custom actions which can be used to run
 # custom Python code.
-#
-# See this guide on how to implement these action:
-# https://rasa.com/docs/rasa/custom-actions
-
-
-# This is a simple example for a custom action which utters "Hello World!"
 
 from typing import Any, Text, Dict, List
 from datetime import datetime, timedelta
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import ReminderScheduled
+import mysql.connector as mysql
+
+DBUSERNAME = "chatbot"
+DBPW = "chatbotDB"
+DBADDRESS = "35.232.172.36"
+DBNAME = "h_farm"
+
+class DBConnectionHandler():
+
+    def connect(self):
+
+        connection = mysql.connect(host = DBADDRESS, user = DBUSERNAME, password = DBPW, database = DBNAME)
+        
+        return connection
+
+    def closeConnection(self, connection):
+
+        connection.commit()
+        connection.close()
+
+        return
 
 class ActionGetCoursesList(Action):
 
-     def name(self) -> Text:
+    def name(self) -> Text:
         return "action_get_courses_list"
 
-     def run(self, dispatcher: CollectingDispatcher,
-             tracker: Tracker,
-             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    def run(self, dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-    f = open(".\\courses_list.txt", "r")    #TODO da implementare con db
+        userFirstname = "user"
+        userEmail = "user@mail.com"
 
-        dispatcher.utter_message(text=f.read())
+        connection = DBConnectionHandler.connect(self)
+        cursor = connection.cursor()
+
+        cursor.execute ("SELECT shortname FROM mdl_course")  #TODO da completare
+	    
+        userInfo = cursor.fetchall()
+
+        DBConnectionHandler.closeConnection(self, connection)
+        
+        buttons=[]
+        for i in userInfo:
+            tuple_to_str = "".join(i)
+            fill_slot = '{"course" : "' + tuple_to_str + '"}'
+            buttons.append({"title": tuple_to_str, "payload" : f'/course_selected{fill_slot}'})
+        
+        dispatcher.utter_message(text = "Che corsi vorresti seguire?", buttons = buttons)
 
         return []
+
+
+#TODO action per lessons_list
+
 
 class ActionGetCourseInfo(Action):
 
@@ -50,11 +85,23 @@ class ActionGetLink(Action):
              tracker: Tracker,
              domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
 
-        dispatcher.utter_message(text= 'link del corso') #TODO info da estrarre da db
+            connection = DBConnectionHandler.connect(self)
 
-        return []
+            cursor = connection.cursor(buffered = True)
 
-class ActionSetReminder(Action):
+            courseName = tracker.get_slot('course')
+
+            cursor.execute ("SELECT externalurl FROM mdl_url WHERE mdl_url.course = (SELECT id FROM mdl_course WHERE shortname = %s)", (courseName, ))
+            
+            course_link = cursor.fetchone()
+            
+            DBConnectionHandler.closeConnection(self, connection)
+
+            dispatcher.utter_message(text= 'Ecco il link al corso ' + tracker.get_slot('course') + " " + "".join(course_link))
+            
+            return []
+
+class ActionSetReminder(Action):    #TODO aggiungere email reminder? quando un nuovo corso è assegnato allo studente il bot gli manda una mail
 
     def name(self) -> Text:
         return "action_set_reminder"

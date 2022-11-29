@@ -44,12 +44,11 @@ nlu:
     - n
     - no grazie
     - non ora
-- intent: course_selected #TODO fix dopo action
+- intent: course_selected
   examples: |
     - [code 1]{"entity": "course"}
     - [code 2]{"entity": "course"}
     - [code 3]{"entity": "course"}
-    - [code 4]{"entity": "course"}
 - intent: course_access
   examples: |
     - course_access
