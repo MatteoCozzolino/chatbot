@@ -47,19 +47,11 @@ responses:
   - text: A quale corso vuoi accedere?
   utter_course_info_selection:
   - text: Per quale corso vuoi ricevere informazioni?
-  utter_show_courses: #TODO action
-  - text: Ecco i corsi disponibili
-    buttons:
-    - title: Code 1
-      payload: '/course_selected{{"course":"code1"}}'
-    - title: Code 2
-      payload: '/course_selected{{"course":"code2"}}'
-    - title: Code 3
-      payload: '/course_selected{{"course":"code3"}}'
   utter_lessons_list: #TODO action
   - text: custom action con la lista
 actions:
 - action_get_courses_list
+- action_get_courses_enrolled
 - action_get_course_info
 - action_get_link
 - action_set_reminder

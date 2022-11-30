@@ -32,7 +32,7 @@ stories:
   - intent: course_info
   - action: utter_course_info_selection
   - intent: course_ask
-  - action: utter_show_courses
+  - action: action_get_courses_enrolled
   - intent: course_selected
   - action: action_get_course_info
   - action: utter_choices_fallback
