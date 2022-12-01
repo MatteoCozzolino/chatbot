@@ -17,18 +17,6 @@ nlu:
     - aiuto
     - help
     - mi serve supporto
-- intent: goodbye
-  examples: |
-    - cu
-    - good by
-    - cee you later
-    - good night
-    - bye
-    - goodbye
-    - have a nice day
-    - see you around
-    - bye bye
-    - see you later
 - intent: affirm
   examples: |
     - yes
@@ -54,7 +42,6 @@ nlu:
     - course_access
     - access
     - accesso
-    - corso
     - fammi accedere ad un corso
     - accesso ai corsi
     - dammi la lista dei corsi
@@ -82,8 +69,6 @@ nlu:
     - corso
     - dammi le informazioni
     - info corsi
-    - dammi la lista dei corsi
-    - lista corsi
     - dammi le info
     - dammi le info su un corso
 - intent: course_ask
