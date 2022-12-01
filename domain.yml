@@ -43,8 +43,6 @@ responses:
       payload: /lessons_list
     - title: Informazioni su un corso
       payload: /course_info
-  utter_course_selection:
-  - text: A quale corso vuoi accedere?
   utter_course_info_selection:
   - text: Per quale corso vuoi ricevere informazioni?
   utter_lessons_list: #TODO action

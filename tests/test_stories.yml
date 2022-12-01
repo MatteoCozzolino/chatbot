@@ -2,90 +2,61 @@
 #### If you want to learn more, please see the docs: https://rasa.com/docs/rasa/testing-your-assistant
 
 stories:
-- story: happy path 1
+- story: bot da il benvenuto all'utente
   steps:
   - user: |
-      hello there!
+      ciao
     intent: greet
-  - action: utter_greet
-  - user: |
-      amazing
-    intent: mood_great
-  - action: utter_happy
+  - action: utter_welcome
+  - action: utter_conversation_choices
 
-- story: happy path 2
+- story: utente vuole accedere ad un corso di sua conoscenza
   steps:
   - user: |
-      hello there!
-    intent: greet
-  - action: utter_greet
+      fammi accedere ad un corso
+    intent: course_access
+  - action: action_get_courses_list
   - user: |
-      amazing
-    intent: mood_great
-  - action: utter_happy
-  - user: |
-      bye-bye!
-    intent: goodbye
-  - action: utter_goodbye
+      [code 1]{"entity": "course"}
+    intent: course_selected
+  - action: action_get_link
+  - action: utter_choices_fallback
 
-- story: sad path 1
+- story: utente vuole sapere quali lezioni deve svolgere
   steps:
   - user: |
-      hello
-    intent: greet
-  - action: utter_greet
+      dammi la lista delle lezioni
+    intent: lessons_list
+  - action: utter_lessons_list
   - user: |
-      not good
-    intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - user: |
-      yes
-    intent: affirm
-  - action: utter_happy
+      code 1 lez 2
+    intent: lesson_selected
+  - action: action_get_link
+  - action: utter_choices_fallback
 
-- story: sad path 2
+- story : utente conosce il corso
   steps:
   - user: |
-      hello
-    intent: greet
-  - action: utter_greet
+      info corsi
+    intent: course_info
+  - action: utter_course_info_selection
   - user: |
-      not good
-    intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - user: |
-      not really
-    intent: deny
-  - action: utter_goodbye
-
-- story: sad path 3
+      [code 1]{"entity": "course"}
+    intent: course_selected
+  - action: action_get_course_info
+  - action: utter_choices_fallback
+- story: utente non conosce i corsi
   steps:
   - user: |
-      hi
-    intent: greet
-  - action: utter_greet
+      info corsi
+    intent: course_info
+  - action: utter_course_info_selection
   - user: |
-      very terrible
-    intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
+      che corsi ci sono
+    intent: course_ask
+  - action: utter_show_courses
   - user: |
-      no
-    intent: deny
-  - action: utter_goodbye
-
-- story: say goodbye
-  steps:
-  - user: |
-      bye-bye!
-    intent: goodbye
-  - action: utter_goodbye
-
-- story: bot challenge
-  steps:
-  - user: |
-      are you a bot?
-    intent: bot_challenge
-  - action: utter_iamabot
+      [code 1]{"entity": "course"}
+    intent: course_selected
+  - action: action_get_course_info
+  - action: utter_choices_fallback
