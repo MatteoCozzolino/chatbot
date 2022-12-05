@@ -49,18 +49,22 @@ nlu:
 - intent: lessons_list
   examples: |
     - lessons_list
+    - lez
+    - inviami le lezioni
+    - dammi gli esercizi
+    - dammi le lezioni
+    - che lezioni
     - lezione
     - dammi la lista delle lezioni
-    - lista
-- intent: lesson_selected #TODO fix dopo action
+    - lista lezioni
+    - lezioni
+- intent: lesson_selected
   examples: |
-    - code 1 lez 2
-    - code 2 lez 34
-    - code 3 lez 54
-    - code 3 lez 3
-    - code 2 lez 9
-    - code 1 lez 10
-    - code 2 lez 12
+    - [17]{"entity": "lesson"}
+    - [26]{"entity": "lesson"}
+    - [35]{"entity": "lesson"}
+    - [44]{"entity": "lesson"}
+    - [61]{"entity": "lesson"}
 - intent: course_info
   examples: |
     - course_info

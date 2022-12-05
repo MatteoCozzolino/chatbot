@@ -2,3 +2,5 @@
 *.pkl
 *.json
 models/
+.DS_Store
+*.lnk

@@ -9,7 +9,6 @@ intents:
 - course_info
 - course_selected
 - deny
-- goodbye
 - greet
 - lesson_selected
 - lessons_list
@@ -27,6 +26,12 @@ slots:
     mappings:
     - type: from_entity
       entity: course
+  lesson:
+    type: text
+    influence_conversation: False
+    mappings:
+    - type: from_entity
+      entity: lesson
 responses:
   utter_goodbye:
   - text: Va bene, sono qui se ti serve aiuto!
@@ -37,16 +42,14 @@ responses:
   utter_conversation_choices:
   - text: ""
     buttons:
-    - title: Accedi al corso
+    - title: Accedi ad un corso
       payload: /course_access
-    - title: Lezioni da svolgere
+    - title: Lezioni già svolte
       payload: /lessons_list
     - title: Informazioni su un corso
       payload: /course_info
   utter_course_info_selection:
   - text: Per quale corso vuoi ricevere informazioni?
-  utter_lessons_list: #TODO action
-  - text: custom action con la lista
 actions:
 - action_get_courses_list
 - action_get_courses_enrolled
@@ -54,3 +57,4 @@ actions:
 - action_get_link
 - action_set_reminder
 - action_react_to_reminder
+- action_get_lessons_list
