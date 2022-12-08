@@ -12,7 +12,7 @@ DBNAME = "h_farm"
 username = "user"   #TODO variabili temporanee con i dati dell'utente da dover estrarre dalla sessione in corso
 userEmail = "user@mail.com"
 
-#Comandi UI rasa run --enable-api --cors “*” --debug 
+#Comandi UI rasa run -m models --enable-api --cors “*” --debug rasa run actions --cors "*" --debug
 
 #La classe gestisce la connessione al DB
 class DBConnectionHandler():
@@ -72,11 +72,6 @@ class ActionGetCoursesList(Action):
         cursor.execute("SELECT shortname FROM mdl_course WHERE mdl_course.id IN (SELECT mdl_course_completions.course FROM mdl_course_completions WHERE mdl_course_completions.userid = (SELECT mdl_user.id FROM mdl_user WHERE mdl_user.username = %s))", (username, ))
         coursesCompleted = cursor.fetchall()
 
-        cursor.execute("SELECT timestart from mdl_user_enrolments WHERE enrolid=25")    #TODO modificare
-        time = cursor.fetchone()
-        res = int(''.join(map(str, time)))/1000
-        print(datetime.utcfromtimestamp(res).strftime('%d-%m-%Y %H:%M:%S'))
-
         DBConnectionHandler.closeConnection(self, connection)
         buttons=[]
 
@@ -88,7 +83,7 @@ class ActionGetCoursesList(Action):
         for i in courseName:                
             tuple_to_str = "".join(i)        
             fill_slot = '{"course" : "' + tuple_to_str + '"}'
-            buttons.append({"title": tuple_to_str, "payload" : f'/course_selected{fill_slot}'}) #TODO query per estrarre il tempo rimasto per finire un corso
+            buttons.append({"title": tuple_to_str, "payload" : f'/course_selected{fill_slot}'}) 
    
         dispatcher.utter_message(text = "Che corso vorresti seguire?", buttons = buttons)
 
@@ -167,12 +162,18 @@ class ActionGetCourseInfo(Action):
         summary = course_info[1]    #TODO da trovare il summary del corso
         startDate = course_info[2]
         endDate= course_info[3]
+
+        cursor.execute("SELECT timestart from mdl_user_enrolments WHERE enrolid IN (SELECT id FROM mdl_enrol WHERE courseid = (SELECT id FROM mdl_course WHERE mdl_course.shortname = %s))", (courseName,))    #TODO modificare
+        timeStart = cursor.fetchone()
+        period = endDate - startDate
+        res = int(''.join(map(str, timeStart)))
+        timeLeft = period + res
             
         DBConnectionHandler.closeConnection(self, connection)
         
         dispatcher.utter_message(text= 'Ecco le informazioni del corso ' + tracker.get_slot('course') + "\nNome completo: " + fullName + "\nRiassunto: " + 
-        summary + "\nData d'inizio: " + datetime.utcfromtimestamp(startDate/1000).strftime('%d-%m-%Y %H:%M:%S')+ "\nData di fine: " + 
-        datetime.utcfromtimestamp(endDate/1000).strftime('%d-%m-%Y %H:%M:%S'))
+        summary + "\nData d'iscrizione: " + datetime.utcfromtimestamp(res).strftime('%d-%m-%Y %H:%M:%S')+ "\nData di fine: " + 
+        datetime.utcfromtimestamp(timeLeft).strftime('%d-%m-%Y %H:%M:%S'))
 
         return []
 

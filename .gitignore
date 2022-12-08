@@ -1,6 +1,5 @@
 .rasa/cache/
 *.pkl
-*.json
 models/
 .DS_Store
 *.lnk
