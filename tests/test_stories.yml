@@ -27,9 +27,9 @@ stories:
   - user: |
       dammi la lista delle lezioni
     intent: lessons_list
-  - action: utter_lessons_list
+  - action: action_get_lessons_list
   - user: |
-      code 1 lez 2
+      [17]{"entity": "lesson"}
     intent: lesson_selected
   - action: action_get_link
   - action: utter_choices_fallback
@@ -54,7 +54,7 @@ stories:
   - user: |
       che corsi ci sono
     intent: course_ask
-  - action: utter_show_courses
+  - action: action_get_courses_enrolled
   - user: |
       [code 1]{"entity": "course"}
     intent: course_selected
