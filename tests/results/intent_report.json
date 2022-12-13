@@ -1,0 +1,85 @@
+{
+  "lesson_selected": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1-score": 1.0,
+    "support": 5,
+    "confused_with": {}
+  },
+  "course_access": {
+    "precision": 0.625,
+    "recall": 0.7142857142857143,
+    "f1-score": 0.6666666666666666,
+    "support": 7,
+    "confused_with": {
+      "lessons_list": 1,
+      "course_ask": 1
+    }
+  },
+  "course_ask": {
+    "precision": 0.7,
+    "recall": 0.875,
+    "f1-score": 0.7777777777777777,
+    "support": 8,
+    "confused_with": {
+      "course_access": 1
+    }
+  },
+  "greet": {
+    "precision": 0.8125,
+    "recall": 0.8666666666666667,
+    "f1-score": 0.8387096774193549,
+    "support": 15,
+    "confused_with": {
+      "affirm": 2
+    }
+  },
+  "lessons_list": {
+    "precision": 0.8,
+    "recall": 0.8,
+    "f1-score": 0.8000000000000002,
+    "support": 10,
+    "confused_with": {
+      "course_access": 2
+    }
+  },
+  "affirm": {
+    "precision": 0.6,
+    "recall": 0.42857142857142855,
+    "f1-score": 0.5,
+    "support": 7,
+    "confused_with": {
+      "greet": 3,
+      "course_ask": 1
+    }
+  },
+  "course_info": {
+    "precision": 1.0,
+    "recall": 0.75,
+    "f1-score": 0.8571428571428571,
+    "support": 8,
+    "confused_with": {
+      "lessons_list": 1,
+      "course_ask": 1
+    }
+  },
+  "accuracy": 0.7833333333333333,
+  "macro avg": {
+    "precision": 0.7910714285714285,
+    "recall": 0.7763605442176872,
+    "f1-score": 0.7771852827152366,
+    "support": 60
+  },
+  "weighted avg": {
+    "precision": 0.789375,
+    "recall": 0.7833333333333333,
+    "f1-score": 0.7804446151220344,
+    "support": 60
+  },
+  "micro avg": {
+    "precision": 0.7833333333333333,
+    "recall": 0.7833333333333333,
+    "f1-score": 0.7833333333333333,
+    "support": 60
+  }
+}
