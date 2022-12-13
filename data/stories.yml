@@ -13,7 +13,7 @@ stories:
   - intent: course_selected
   - action: action_get_link
   - action: utter_choices_fallback
-- story: utente vuole sapere quali lezioni deve svolgere
+- story: utente vuole fare un ripasso di una lezione già svolta
   steps:
   - intent: lessons_list
   - action: action_get_lessons_list
@@ -32,7 +32,7 @@ stories:
   - intent: course_info
   - action: utter_course_info_selection
   - intent: course_ask
-  - action: action_get_courses_enrolled
+  - action: action_get_courses_list
   - intent: course_selected
   - action: action_get_course_info
   - action: utter_choices_fallback

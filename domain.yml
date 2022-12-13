@@ -3,7 +3,11 @@ session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true
 intents:
+- EXTERNAL_reminder:
+    trigger: action_react_to_reminder
 - affirm
+- ask_remind:
+    trigger: action_set_reminder
 - course_access
 - course_ask
 - course_info
@@ -12,23 +16,19 @@ intents:
 - greet
 - lesson_selected
 - lessons_list
-- ask_remind:
-    trigger: action_set_reminder
-- EXTERNAL_reminder:
-    trigger: action_react_to_reminder
 entities:
-  - course
-  - lesson
+- lesson
+- course
 slots:
   course:
     type: text
-    influence_conversation: False
+    influence_conversation: false
     mappings:
     - type: from_entity
       entity: course
   lesson:
     type: text
-    influence_conversation: False
+    influence_conversation: false
     mappings:
     - type: from_entity
       entity: lesson
@@ -40,7 +40,7 @@ responses:
   utter_choices_fallback:
   - text: Hai bisogno di altro?
   utter_conversation_choices:
-  - text: ""
+  - text: ''
     buttons:
     - title: Accedi ad un corso
       payload: /course_access
@@ -51,10 +51,9 @@ responses:
   utter_course_info_selection:
   - text: Per quale corso vuoi ricevere informazioni?
 actions:
-- action_get_courses_list
-- action_get_courses_enrolled
 - action_get_course_info
-- action_get_link
-- action_set_reminder
-- action_react_to_reminder
+- action_get_courses_list
 - action_get_lessons_list
+- action_get_link
+- action_react_to_reminder
+- action_set_reminder

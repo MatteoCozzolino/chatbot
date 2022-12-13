@@ -12,7 +12,7 @@ DBNAME = "h_farm"
 username = "user"   #TODO variabili temporanee con i dati dell'utente da dover estrarre dalla sessione in corso
 userEmail = "user@mail.com"
 
-#Comandi UI rasa run -m models --enable-api --cors “*” --debug rasa run actions --cors "*" --debug
+#Comandi UI rasa run -m models --enable-api --cors "*" --debug rasa run actions --cors "*" --debug
 
 #La classe gestisce la connessione al DB
 class DBConnectionHandler():
@@ -75,7 +75,7 @@ class ActionGetCoursesList(Action):
         DBConnectionHandler.closeConnection(self, connection)
         buttons=[]
 
-        #I corsi già completati sono eliminati dalla lista dei corsi che lo studente può seguire
+        #I corsi già completati sono eliminati dalla lista dei corsi
         if len(coursesCompleted) > 0:
             for j in coursesCompleted:
                 if courseName.count(j) > 0:
@@ -84,29 +84,11 @@ class ActionGetCoursesList(Action):
             tuple_to_str = "".join(i)        
             fill_slot = '{"course" : "' + tuple_to_str + '"}'
             buttons.append({"title": tuple_to_str, "payload" : f'/course_selected{fill_slot}'}) 
-   
-        dispatcher.utter_message(text = "Che corso vorresti seguire?", buttons = buttons)
 
-        return []
-
-class ActionGetCoursesEnrolled(Action):
-
-     def name(self) -> Text:
-        return "action_get_courses_enrolled"
-
-     def run(self, dispatcher: CollectingDispatcher,
-             tracker: Tracker,
-             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
-        courseName = Courses.getList(self)
-    
-        buttons=[]
-        for i in courseName:                
-            tuple_to_str = "".join(i)        
-            fill_slot = '{"course" : "' + tuple_to_str + '"}'
-            buttons.append({"title": tuple_to_str, "payload" : f'/course_selected{fill_slot}'})
-   
-        dispatcher.utter_message(text = "Di quale corso vuoi più informazioni?", buttons = buttons)
+        if tracker.get_intent_of_latest_message() == "course_access":
+            dispatcher.utter_message(text = "Che corso vorresti seguire?", buttons = buttons)
+        elif tracker.get_intent_of_latest_message() == "course_ask":
+            dispatcher.utter_message(text = "Di quale corso vuoi più informazioni?", buttons = buttons)
 
         return []
 
@@ -122,22 +104,31 @@ class ActionGetLessonsList(Action):
         connection = DBConnectionHandler.connect(self)
         cursor = connection.cursor()
 
+        courseName = tracker.get_slot('course')
+
         #Query che estrae le lezioni completate
         cursor.execute("SELECT instance FROM mdl_course_modules WHERE id IN (SELECT coursemoduleid FROM mdl_course_modules_completion WHERE userid = (SELECT mdl_user.id FROM mdl_user WHERE mdl_user.username = %s))", (username, ))
         lessonCompleted = cursor.fetchall()
         
         buttons=[]
         for i in lessonCompleted:
-            cursor.execute("SELECT shortname FROM mdl_course WHERE id = (SELECT course FROM mdl_course_modules WHERE instance = %s)", (i))
-            course_name = "".join(cursor.fetchone())
+            cursor.execute("SELECT id FROM mdl_course WHERE shortname = %s", (courseName,))
+            courseID = cursor.fetchone()
+            cursor.execute("SELECT instance FROM mdl_course_modules WHERE course = %s", (courseID))
+            lessonRequested = cursor.fetchall()
+            if len(lessonCompleted) > 0:
+                for j in lessonCompleted:
+                    if lessonRequested.count(j) < 1:
+                        lessonCompleted.remove(j)
+
             cursor.execute("SELECT name FROM mdl_url WHERE id = %s", (i))
             lesson_name = "".join(cursor.fetchone())
             fill_slot = '{"lesson" : "' + str(i[0]) + '"}'
-            buttons.append({"title": "Corso: " + course_name + " Lezione: " + lesson_name, "payload" : f'/lesson_selected{fill_slot}'})
+            buttons.append({"title": "Corso: " + courseName + " Lezione: " + lesson_name, "payload" : f'/lesson_selected{fill_slot}'})
 
         DBConnectionHandler.closeConnection(self, connection)
         
-        dispatcher.utter_message(text = "Che lezione vorresti seguire?", buttons = buttons)
+        dispatcher.utter_message(text = "", buttons = buttons)
 
         return []
 
@@ -155,24 +146,28 @@ class ActionGetCourseInfo(Action):
 
         courseName = tracker.get_slot('course')
 
-        cursor.execute ("SELECT fullname, summary, startdate, enddate FROM mdl_course WHERE mdl_course.shortname =  %s", (courseName, ))
+        cursor.execute ("SELECT fullname, startdate, enddate FROM mdl_course WHERE mdl_course.shortname =  %s", (courseName, ))
         course_info = cursor.fetchone()
 
         fullName = course_info[0]
-        summary = course_info[1]    #TODO da trovare il summary del corso
-        startDate = course_info[2]
-        endDate= course_info[3]
+        startDate = course_info[1]
+        endDate= course_info[2]
 
-        cursor.execute("SELECT timestart from mdl_user_enrolments WHERE enrolid IN (SELECT id FROM mdl_enrol WHERE courseid = (SELECT id FROM mdl_course WHERE mdl_course.shortname = %s))", (courseName,))    #TODO modificare
+        cursor.execute("SELECT timestart from mdl_user_enrolments WHERE enrolid IN (SELECT id FROM mdl_enrol WHERE courseid = (SELECT id FROM mdl_course WHERE mdl_course.shortname = %s))", (courseName,))
         timeStart = cursor.fetchone()
         period = endDate - startDate
         res = int(''.join(map(str, timeStart)))
         timeLeft = period + res
+
+        cursor.execute("SELECT count(*) FROM mdl_course_modules WHERE course = (SELECT id FROM mdl_course WHERE shortname = %s)", (courseName,))
+        totalLessons = cursor.fetchone()
+        cursor.execute("SELECT count(*) FROM mdl_course_modules WHERE id IN (SELECT coursemoduleid FROM mdl_course_modules_completion WHERE userid = (SELECT mdl_user.id FROM mdl_user WHERE mdl_user.username = %s))", (username, ))
+        finishedLessons = cursor.fetchone()
             
         DBConnectionHandler.closeConnection(self, connection)
         
-        dispatcher.utter_message(text= 'Ecco le informazioni del corso ' + tracker.get_slot('course') + "\nNome completo: " + fullName + "\nRiassunto: " + 
-        summary + "\nData d'iscrizione: " + datetime.utcfromtimestamp(res).strftime('%d-%m-%Y %H:%M:%S')+ "\nData di fine: " + 
+        dispatcher.utter_message(text= 'Ecco le informazioni del corso ' + courseName + "\nNome completo: " + fullName + "\nIl tuo progresso: " + 
+        ''.join(map(str, finishedLessons)) + " lezioni completate su " + ''.join(map(str, totalLessons)) + "\nData d'iscrizione: " + datetime.utcfromtimestamp(res).strftime('%d-%m-%Y %H:%M:%S')+ "\nData di fine: " + 
         datetime.utcfromtimestamp(timeLeft).strftime('%d-%m-%Y %H:%M:%S'))
 
         return []
