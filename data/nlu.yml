@@ -37,6 +37,11 @@ nlu:
     - [code 1]{"entity": "course"}
     - [code 2]{"entity": "course"}
     - [code 3]{"entity": "course"}
+- intent: course_selected_for_lessons
+  examples: |
+    - [code 1]{"entity": "course"}
+    - [code 2]{"entity": "course"}
+    - [code 3]{"entity": "course"}
 - intent: course_access
   examples: |
     - course_access

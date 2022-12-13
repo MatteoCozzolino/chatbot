@@ -5,13 +5,14 @@ session_config:
 intents:
 - EXTERNAL_reminder:
     trigger: action_react_to_reminder
-- affirm
 - ask_remind:
     trigger: action_set_reminder
+- affirm
 - course_access
 - course_ask
 - course_info
 - course_selected
+- course_selected_for_lessons
 - deny
 - greet
 - lesson_selected

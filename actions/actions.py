@@ -89,6 +89,13 @@ class ActionGetCoursesList(Action):
             dispatcher.utter_message(text = "Che corso vorresti seguire?", buttons = buttons)
         elif tracker.get_intent_of_latest_message() == "course_ask":
             dispatcher.utter_message(text = "Di quale corso vuoi più informazioni?", buttons = buttons)
+        elif tracker.get_intent_of_latest_message() == "lessons_list":
+            buttonsForLessons =[]
+            for i in courseName:                
+                tuple_to_str = "".join(i)        
+                fill_slot = '{"course" : "' + tuple_to_str + '"}'
+                buttonsForLessons.append({"title": tuple_to_str, "payload" : f'/course_selected_for_lessons{fill_slot}'}) 
+            dispatcher.utter_message(text = "Di quale corso vuoi ripassare delle lezioni?", buttons = buttonsForLessons)
 
         return []
 
@@ -109,21 +116,20 @@ class ActionGetLessonsList(Action):
         #Query che estrae le lezioni completate
         cursor.execute("SELECT instance FROM mdl_course_modules WHERE id IN (SELECT coursemoduleid FROM mdl_course_modules_completion WHERE userid = (SELECT mdl_user.id FROM mdl_user WHERE mdl_user.username = %s))", (username, ))
         lessonCompleted = cursor.fetchall()
-        
-        buttons=[]
-        for i in lessonCompleted:
-            cursor.execute("SELECT id FROM mdl_course WHERE shortname = %s", (courseName,))
-            courseID = cursor.fetchone()
-            cursor.execute("SELECT instance FROM mdl_course_modules WHERE course = %s", (courseID))
-            lessonRequested = cursor.fetchall()
-            if len(lessonCompleted) > 0:
-                for j in lessonCompleted:
-                    if lessonRequested.count(j) < 1:
-                        lessonCompleted.remove(j)
+        lessons=[]
+        courseID = Courses.getCourseByName(self, courseName)
+        cursor.execute("SELECT instance FROM mdl_course_modules WHERE course = %s", (courseID))
+        lessonRequested = cursor.fetchall()
+        if len(lessonCompleted) > 0:
+            for j in lessonCompleted:
+                if lessonRequested.count(j) == 1:
+                    lessons.append(j)
 
+        buttons=[]
+        for i in lessons:
             cursor.execute("SELECT name FROM mdl_url WHERE id = %s", (i))
             lesson_name = "".join(cursor.fetchone())
-            fill_slot = '{"lesson" : "' + str(i[0]) + '"}'
+            fill_slot = '{"lesson" : "' + ''.join(map(str, i)) + '"}'
             buttons.append({"title": "Corso: " + courseName + " Lezione: " + lesson_name, "payload" : f'/lesson_selected{fill_slot}'})
 
         DBConnectionHandler.closeConnection(self, connection)
@@ -151,7 +157,7 @@ class ActionGetCourseInfo(Action):
 
         fullName = course_info[0]
         startDate = course_info[1]
-        endDate= course_info[2]
+        endDate = course_info[2]
 
         cursor.execute("SELECT timestart from mdl_user_enrolments WHERE enrolid IN (SELECT id FROM mdl_enrol WHERE courseid = (SELECT id FROM mdl_course WHERE mdl_course.shortname = %s))", (courseName,))
         timeStart = cursor.fetchone()

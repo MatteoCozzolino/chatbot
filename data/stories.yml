@@ -16,6 +16,8 @@ stories:
 - story: utente vuole fare un ripasso di una lezione già svolta
   steps:
   - intent: lessons_list
+  - action: action_get_courses_list
+  - intent: course_selected_for_lessons
   - action: action_get_lessons_list
   - intent: lesson_selected
   - action: action_get_link
