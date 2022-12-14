@@ -11,6 +11,11 @@ rules:
   - intent: deny
   - action: utter_goodbye
 
+- rule: Chiede all'utente di ripetere quando la confidence di NLU è troppo bassa
+  steps:
+  - intent: nlu_fallback
+  - action: utter_please_rephrase
+
 - rule: Programma un reminder
   steps:
   - intent: ask_remind

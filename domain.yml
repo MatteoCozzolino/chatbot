@@ -51,6 +51,8 @@ responses:
       payload: /course_info
   utter_course_info_selection:
   - text: Per quale corso vuoi ricevere informazioni?
+  utter_please_rephrase:
+  - text: Scusa! Sto ancora imparando e non ho capito, potresti ripetere?
 actions:
 - action_get_course_info
 - action_get_courses_list

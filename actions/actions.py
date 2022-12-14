@@ -86,16 +86,16 @@ class ActionGetCoursesList(Action):
             buttons.append({"title": tuple_to_str, "payload" : f'/course_selected{fill_slot}'}) 
 
         if tracker.get_intent_of_latest_message() == "course_access":
-            dispatcher.utter_message(text = "Che corso vorresti seguire?", buttons = buttons)
+            dispatcher.utter_message(text = "Che corso vorresti seguire? Fai click su uno dei pulsanti", buttons = buttons)
         elif tracker.get_intent_of_latest_message() == "course_ask":
-            dispatcher.utter_message(text = "Di quale corso vuoi più informazioni?", buttons = buttons)
+            dispatcher.utter_message(text = "Di quale corso vuoi più informazioni? Fai click su uno dei pulsanti", buttons = buttons)
         elif tracker.get_intent_of_latest_message() == "lessons_list":
             buttonsForLessons =[]
             for i in courseName:                
                 tuple_to_str = "".join(i)        
                 fill_slot = '{"course" : "' + tuple_to_str + '"}'
                 buttonsForLessons.append({"title": tuple_to_str, "payload" : f'/course_selected_for_lessons{fill_slot}'}) 
-            dispatcher.utter_message(text = "Di quale corso vuoi ripassare delle lezioni?", buttons = buttonsForLessons)
+            dispatcher.utter_message(text = "Di quale corso vuoi ripassare delle lezioni? Fai click su uno dei pulsanti", buttons = buttonsForLessons)
 
         return []
 
@@ -130,11 +130,11 @@ class ActionGetLessonsList(Action):
             cursor.execute("SELECT name FROM mdl_url WHERE id = %s", (i))
             lesson_name = "".join(cursor.fetchone())
             fill_slot = '{"lesson" : "' + ''.join(map(str, i)) + '"}'
-            buttons.append({"title": "Corso: " + courseName + " Lezione: " + lesson_name, "payload" : f'/lesson_selected{fill_slot}'})
+            buttons.append({"title": "Lezione: " + lesson_name, "payload" : f'/lesson_selected{fill_slot}'})
 
         DBConnectionHandler.closeConnection(self, connection)
         
-        dispatcher.utter_message(text = "", buttons = buttons)
+        dispatcher.utter_message(text = "Ecco le lezioni che puoi ripassare! Fai click su uno dei pulsanti", buttons = buttons)
 
         return []
 
@@ -152,22 +152,23 @@ class ActionGetCourseInfo(Action):
 
         courseName = tracker.get_slot('course')
 
-        cursor.execute ("SELECT fullname, startdate, enddate FROM mdl_course WHERE mdl_course.shortname =  %s", (courseName, ))
+        cursor.execute ("SELECT id, fullname, startdate, enddate FROM mdl_course WHERE mdl_course.shortname =  %s", (courseName, ))
         course_info = cursor.fetchone()
 
-        fullName = course_info[0]
-        startDate = course_info[1]
-        endDate = course_info[2]
+        courseID = course_info[0]
+        fullName = course_info[1]
+        startDate = course_info[2]
+        endDate = course_info[3]
 
-        cursor.execute("SELECT timestart from mdl_user_enrolments WHERE enrolid IN (SELECT id FROM mdl_enrol WHERE courseid = (SELECT id FROM mdl_course WHERE mdl_course.shortname = %s))", (courseName,))
+        cursor.execute("SELECT timestart from mdl_user_enrolments WHERE enrolid IN (SELECT id FROM mdl_enrol WHERE courseid = %s)", (courseID,))
         timeStart = cursor.fetchone()
         period = endDate - startDate
         res = int(''.join(map(str, timeStart)))
         timeLeft = period + res
 
-        cursor.execute("SELECT count(*) FROM mdl_course_modules WHERE course = (SELECT id FROM mdl_course WHERE shortname = %s)", (courseName,))
+        cursor.execute("SELECT count(*) FROM mdl_course_modules WHERE course = %s", (courseID,))
         totalLessons = cursor.fetchone()
-        cursor.execute("SELECT count(*) FROM mdl_course_modules WHERE id IN (SELECT coursemoduleid FROM mdl_course_modules_completion WHERE userid = (SELECT mdl_user.id FROM mdl_user WHERE mdl_user.username = %s))", (username, ))
+        cursor.execute("SELECT count(*) FROM mdl_course_modules WHERE course = " + str(courseID) +" AND id IN (SELECT coursemoduleid FROM mdl_course_modules_completion WHERE userid = (SELECT mdl_user.id FROM mdl_user WHERE mdl_user.username = %s))", (username, ))
         finishedLessons = cursor.fetchone()
             
         DBConnectionHandler.closeConnection(self, connection)
@@ -194,10 +195,27 @@ class ActionGetLink(Action):
             if tracker.get_intent_of_latest_message() == "course_selected":
                 courseName = tracker.get_slot('course')
                 courseid = Courses.getCourseByName(self, courseName)
-                cursor.execute("SELECT instance FROM mdl_course_modules WHERE course = " + str(courseid[0]) + " AND id IN (SELECT coursemoduleid FROM mdl_course_modules_completion WHERE userid = (SELECT mdl_user.id FROM mdl_user WHERE mdl_user.username = %s))", (username, ))
+                cursor.execute("SELECT mdl_user.id FROM mdl_user WHERE mdl_user.username = %s", (username, ))
+                userid = cursor.fetchone()
+                cursor.execute("SELECT instance FROM mdl_course_modules WHERE course = " + str(courseid[0]) + " AND id IN (SELECT coursemoduleid FROM mdl_course_modules_completion WHERE userid = %s)", (userid))
                 lessons = cursor.fetchall()
                 lastLesson = "".join(map(str, lessons[-1]))
-                lessonid = int(lastLesson) + 1  
+                lessonid = int(lastLesson) + 1
+
+                #Viene fatto un check per controllare se l'utente ha terminato il corso
+                cursor.execute("SELECT course FROM mdl_course_modules WHERE instance = %s", (lessonid, ))
+                instanceCourse = cursor.fetchone()
+                if instanceCourse != courseid:
+                    DBConnectionHandler.closeConnection(self, connection)
+                    dispatcher.utter_message(text = "Non ci sono più lezioni disponibili per questo corso, ottimo lavoro!")
+                    return []
+
+                #Estrae dati per inserire nella tabella course_moduls_completion la nuova lezione svolta
+                cursor.execute("SELECT id FROM mdl_course_modules WHERE instance = %s", (lessonid, ))
+                moduleid = cursor.fetchone()
+                cursor.execute("SELECT max(id) FROM mdl_course_modules_completion") 
+                maxid = cursor.fetchone()
+                cursor.execute("INSERT INTO mdl_course_modules_completion VALUES (%s,%s,%s,1,1,NULL,%s)", (int(''.join(map(str, maxid))) + 1 , int(''.join(map(str, moduleid))), int(''.join(map(str, userid))), datetime.timestamp(datetime.now())))       
             elif tracker.get_intent_of_latest_message() == "lesson_selected":
                 lessonid = tracker.get_slot('lesson')
                 cursor.execute("SELECT shortname FROM mdl_course WHERE id = (SELECT course FROM mdl_course_modules WHERE instance = " + lessonid + ")")

@@ -47,6 +47,9 @@ nlu:
     - course_access
     - access
     - accesso
+    - voglio seguire un corso
+    - voglio accedere a un corso
+    - voglio fare un nuovo esercizio
     - fammi accedere ad un corso
     - accesso ai corsi
     - dammi la lista dei corsi
@@ -60,6 +63,8 @@ nlu:
     - dammi le lezioni
     - che lezioni
     - lezione
+    - voglio ripassare una lezione
+    - ripasso
     - dammi la lista delle lezioni
     - lista lezioni
     - lezioni
@@ -75,7 +80,7 @@ nlu:
     - course_info
     - informazioni
     - info
-    - corso
+    - voglio info
     - dammi le informazioni
     - info corsi
     - dammi le info

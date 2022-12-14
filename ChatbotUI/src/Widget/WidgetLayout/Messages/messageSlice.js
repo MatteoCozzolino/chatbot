@@ -22,7 +22,7 @@ const initialState = {
   messages: [],
   botTyping: false,
   userTyping: true,
-  userTypingPlaceholder: "Type your message here...",
+  userTypingPlaceholder: "Scrivi qui il tuo messaggio...",
   userGreeted: false,
 };
 export const messagesSlice = createSlice({
@@ -66,8 +66,8 @@ export const messagesSlice = createSlice({
     toggleBotTyping: (state, action) => {
       state.botTyping = action.payload;
       state.userTypingPlaceholder = action.payload
-        ? "Please wait for bot response..."
-        : "Type your message here...";
+        ? "Per favore attendi la risposta del bot..."
+        : "Scrivi qui il tuo messaggio...";
     },
     setUserTypingPlaceholder: (state, action) => {
       state.userTypingPlaceholder = action.payload;
@@ -120,7 +120,7 @@ export const messagesSlice = createSlice({
         }
       } else {
         state.messages.push({
-          text: "Unfortunately, I'm having some problem 😅. I would appreciate it if you could try again later",
+          text: "Scusa! Sto ancora imparando e non ho capito, potresti ripetere?",
           sender: "BOT",
           type: "text",
           ts: new Date(),
