@@ -22,15 +22,165 @@ stories:
   - action: action_get_link
   - action: utter_choices_fallback
 
-- story: utente vuole sapere quali lezioni deve svolgere
+- story: utente vuole accedere ad un corso di sua conoscenza
+  steps:
+  - user: /course_access
+    intent: course_access
+  - action: action_get_courses_list
+  - user: |
+      [code 1]{"entity": "course"}
+    intent: course_selected
+  - action: action_get_link
+  - action: utter_choices_fallback
+
+- story: utente vuole accedere ad un corso di sua conoscenza con un input inaspettato
+  steps:
+  - user: /course_access
+    intent: course_access
+  - action: action_get_courses_list
+  - user: |
+      yo
+    intent: greet
+  - action: utter_welcome
+  - action: utter_conversation_choices
+  - user: /course_access
+    intent: course_access
+  - action: action_get_courses_list
+  - user: |
+      [code 1]{"entity": "course"}
+    intent: course_selected
+  - action: action_get_link
+  - action: utter_choices_fallback
+
+- story: utente vuole accedere ad un corso di sua conoscenza con un due input inaspettato
+  steps:
+  - user: /course_access
+    intent: course_access
+  - action: action_get_courses_list
+  - user: |
+      yo
+    intent: greet
+  - action: utter_welcome
+  - action: utter_conversation_choices
+  - user: |
+      yo
+    intent: greet
+  - action: utter_welcome
+  - action: utter_conversation_choices
+  - user: /course_access
+    intent: course_access
+  - action: action_get_courses_list
+  - user: |
+      [code 1]{"entity": "course"}
+    intent: course_selected
+  - action: action_get_link
+  - action: utter_choices_fallback
+
+- story: utente vuole accedere ad un corso di sua conoscenza ma poi cambia idea
+  steps:
+  - user: /course_access
+    intent: course_access
+  - action: action_get_courses_list
+  - user: |
+      no grazie
+    intent: deny
+  - action: utter_goodbye
+
+- story: utente vuole accedere ad un corso di sua conoscenza con un due input inaspettato e poi chiude la conversazione
+  steps:
+  - user: /course_access
+    intent: course_access
+  - action: action_get_courses_list
+  - user: |
+      yo
+    intent: greet
+  - action: utter_welcome
+  - action: utter_conversation_choices
+  - user: |
+      yo
+    intent: greet
+  - action: utter_welcome
+  - action: utter_conversation_choices
+  - user: |
+      no grazie
+    intent: deny
+  - action: utter_goodbye
+
+- story: utente vuole sapere quali lezioni ha svolto
   steps:
   - user: |
       dammi la lista delle lezioni
     intent: lessons_list
+  - action: action_get_courses_list
+  - user: |
+      [code 1]{"entity": "course"}
+    intent: course_selected_for_lessons
   - action: action_get_lessons_list
   - user: |
       [17]{"entity": "lesson"}
     intent: lesson_selected
+  - action: action_get_link
+  - action: utter_choices_fallback
+
+- story: utente vuole sapere quali lezioni ha svolto
+  steps:
+  - user: /lessons_list
+    intent: lessons_list
+  - action: action_get_courses_list
+  - user: |
+      [code 1]{"entity": "course"}
+    intent: course_selected_for_lessons
+  - action: action_get_lessons_list
+  - user: |
+      [17]{"entity": "lesson"}
+    intent: lesson_selected
+  - action: action_get_link
+  - action: utter_choices_fallback
+
+- story: utente vuole sapere quali lezioni ha svolto ma riceve un input inaspettato
+  steps:
+  - user: /lessons_list
+    intent: lessons_list
+  - action: action_get_courses_list
+  - user: |
+      si
+    intent: affirm
+  - action: utter_conversation_choices
+  - user: /lessons_list
+    intent: lessons_list
+  - action: action_get_courses_list
+  - user: |
+      [code 1]{"entity": "course"}
+    intent: course_selected_for_lessons
+  - action: action_get_lessons_list
+  - user: |
+      [17]{"entity": "lesson"}
+    intent: lesson_selected
+  - action: action_get_link
+  - action: utter_choices_fallback
+
+- story: utente vuole sapere quali lezioni ha svolto ma poi cambia idea
+  steps:
+  - user: /lessons_list
+    intent: lessons_list
+  - action: action_get_courses_list
+  - user: |
+      no
+    intent: deny
+  - action: utter_goodbye
+
+- story: utente vuole sapere quali lezioni ha svolto ma poi vuole accedere ad un corso
+  steps:
+  - user: /lessons_list
+    intent: lessons_list
+  - action: action_get_courses_list
+  - user: |
+      accesso ai corsi
+    intent: course_access
+  - action: action_get_courses_list
+  - user: |
+      [code 1]{"entity": "course"}
+    intent: course_selected
   - action: action_get_link
   - action: utter_choices_fallback
 
@@ -45,10 +195,10 @@ stories:
     intent: course_selected
   - action: action_get_course_info
   - action: utter_choices_fallback
+
 - story: utente non conosce i corsi
   steps:
-  - user: |
-      info corsi
+  - user: /course_info
     intent: course_info
   - action: utter_course_info_selection
   - user: |
@@ -59,4 +209,109 @@ stories:
       [code 1]{"entity": "course"}
     intent: course_selected
   - action: action_get_course_info
+  - action: utter_choices_fallback
+
+- story: utente chiede info ma inserisce un input inaspettato
+  steps:
+  - user: /course_info
+    intent: course_info
+  - action: utter_course_info_selection
+  - user: |
+      che corsi ci sono
+    intent: course_ask
+  - action: action_get_courses_enrolled
+  - user: |
+      yo
+    intent: greet
+  - action: utter_welcome
+  - action: utter_conversation_choices
+  - user: /course_info
+    intent: course_info
+  - action: utter_course_info_selection
+  - user: |
+      che corsi ci sono
+    intent: course_ask
+  - action: action_get_courses_enrolled
+  - user: |
+      [code 1]{"entity": "course"}
+    intent: course_selected
+  - action: action_get_course_info
+  - action: utter_choices_fallback
+
+- story: utente chiede info ma inserisce un input inaspettato e poi cambia idea
+  steps:
+  - user: /course_info
+    intent: course_info
+  - action: utter_course_info_selection
+  - user: |
+      che corsi ci sono
+    intent: course_ask
+  - action: action_get_courses_enrolled
+  - user: |
+      yo
+    intent: greet
+  - action: utter_welcome
+  - action: utter_conversation_choices
+  - user: |
+      no
+    intent: deny
+  - action: utter_goodbye
+
+- story: utente vuole sapere quali lezioni ha svolto e poi accedere ad un corso infine cambia idea
+  steps:
+  - user: /lessons_list
+    intent: lessons_list
+  - action: action_get_courses_list
+  - user: |
+      [code 1]{"entity": "course"}
+    intent: course_selected_for_lessons
+  - action: action_get_lessons_list
+  - user: |
+      [17]{"entity": "lesson"}
+    intent: lesson_selected
+  - action: action_get_link
+  - action: utter_choices_fallback
+  - user: |
+      si
+    intent: affirm
+  - action: utter_conversation_choices
+  - user: /course_access
+    intent: course_access
+  - action: action_get_courses_list
+  - user: |
+      yo
+    intent: greet
+  - action: utter_welcome
+  - action: utter_conversation_choices
+  - user: |
+      yo
+    intent: greet
+  - action: utter_welcome
+  - action: utter_conversation_choices
+  - user: |
+      no grazie
+    intent: deny
+  - action: utter_goodbye
+
+- story: utente vuole sapere quali lezioni ha svolto e poi accedere ad un corso infine cambia idea
+  steps:
+  - user: /lessons_list
+    intent: lessons_list
+  - action: action_get_courses_list
+  - user: |
+      ghjkughukfgkfg 
+    intent: nlu_fallback
+  - action: utter_please_rephrase
+  - user: |
+      lezioni 
+    intent: lessons_list
+  - action: action_get_courses_list
+  - user: |
+      [code 1]{"entity": "course"}
+    intent: course_selected_for_lessons
+  - action: action_get_lessons_list
+  - user: |
+      [17]{"entity": "lesson"}
+    intent: lesson_selected
+  - action: action_get_link
   - action: utter_choices_fallback
