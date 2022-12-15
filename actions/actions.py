@@ -2,7 +2,7 @@ from typing import Any, Text, Dict, List
 from datetime import datetime, timedelta
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
-from rasa_sdk.events import ReminderScheduled
+from rasa_sdk.events import ReminderScheduled, SlotSet
 import mysql.connector as mysql
 
 DBUSERNAME = "chatbot"
@@ -87,14 +87,14 @@ class ActionGetCoursesList(Action):
 
         if tracker.get_intent_of_latest_message() == "course_access":
             dispatcher.utter_message(text = "Che corso vorresti seguire? Fai click su uno dei pulsanti", buttons = buttons)
-        elif tracker.get_intent_of_latest_message() == "course_ask":
+        elif tracker.get_intent_of_latest_message() == "course_info":
             dispatcher.utter_message(text = "Di quale corso vuoi più informazioni? Fai click su uno dei pulsanti", buttons = buttons)
         elif tracker.get_intent_of_latest_message() == "lessons_list":
             buttonsForLessons =[]
             for i in courseName:                
                 tuple_to_str = "".join(i)        
                 fill_slot = '{"course" : "' + tuple_to_str + '"}'
-                buttonsForLessons.append({"title": tuple_to_str, "payload" : f'/course_selected_for_lessons{fill_slot}'}) 
+                buttonsForLessons.append({"title": tuple_to_str, "payload" : f'/course_selected{fill_slot}'}) 
             dispatcher.utter_message(text = "Di quale corso vuoi ripassare delle lezioni? Fai click su uno dei pulsanti", buttons = buttonsForLessons)
 
         return []
@@ -229,9 +229,12 @@ class ActionGetLink(Action):
 
             DBConnectionHandler.closeConnection(self, connection)
 
-            dispatcher.utter_message(text = "Ecco il link alla lezione " + str(lessonName) + " del corso " + str(courseName) + " " + "".join(course_link))
-            
-            return []
+            if tracker.get_intent_of_latest_message() == "course_selected":
+                dispatcher.utter_message(text = "Ecco il link alla lezione " + str(lessonName) + " " + "".join(course_link) + "\nDimmi quando hai finito :D")
+            elif tracker.get_intent_of_latest_message() == "lesson_selected":
+                dispatcher.utter_message(text = "Ecco il link alla lezione " + str(lessonName) + " " + "".join(course_link))
+
+            return [SlotSet("lesson", lessonid)]    #TODO controllare dopo che ActionGetFeedback è stata fatta
 
 class ActionSetReminder(Action):    #TODO aggiungere email reminder? quando un nuovo corso è assegnato allo studente il bot gli manda una mail
 
@@ -271,5 +274,25 @@ class ActionReactToReminder(Action):
     ) -> List[Dict[Text, Any]]:
 
         dispatcher.utter_message("Ricordati di finire la lezione")
+
+        return []
+
+#TODO action che gestisce il feedback dell'utente sulla lezione appena fatta 
+class ActionGetLessonFeedback(Action):
+
+    def name(self) -> Text:
+        return "action_get_lesson_feedback"
+
+    def run(self, dispatcher: CollectingDispatcher,
+        tracker: Tracker, 
+        domain: Dict[Text, Any],) -> List[Dict[Text, Any]]:
+
+        lesson_feedback_score = tracker.get_slot('feedback_score')
+        lessonid = tracker.get_slot('lesson')
+
+        #segna la lezione come completata
+
+        #memorizza il feedback score nel db
+        print(lesson_feedback_score, lessonid)
 
         return []

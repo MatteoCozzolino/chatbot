@@ -37,11 +37,6 @@ nlu:
     - [code 1]{"entity": "course"}
     - [code 2]{"entity": "course"}
     - [code 3]{"entity": "course"}
-- intent: course_selected_for_lessons
-  examples: |
-    - [code 1]{"entity": "course"}
-    - [code 2]{"entity": "course"}
-    - [code 3]{"entity": "course"}
 - intent: course_access
   examples: |
     - course_access
@@ -75,6 +70,29 @@ nlu:
     - [35]{"entity": "lesson"}
     - [44]{"entity": "lesson"}
     - [61]{"entity": "lesson"}
+- intent: lesson_done
+  examples: |
+    - ho finito
+    - finito
+    - basta
+    - ultimato
+    - completato
+    - ho finito la lezione
+    - ho finito il corso
+    - ho fatto l'esercizio
+    - ho fatto
+- intent: lesson_feedback_score
+  examples: |
+    - [1]{"entity": "feedback_score"}
+    - [2]{"entity": "feedback_score"}
+    - [3]{"entity": "feedback_score"}
+    - [4]{"entity": "feedback_score"}
+    - [5]{"entity": "feedback_score"}
+    - [6]{"entity": "feedback_score"}
+    - [7]{"entity": "feedback_score"}
+    - [8]{"entity": "feedback_score"}
+    - [9]{"entity": "feedback_score"}
+    - [10]{"entity": "feedback_score"}
 - intent: course_info
   examples: |
     - course_info
@@ -85,16 +103,6 @@ nlu:
     - info corsi
     - dammi le info
     - dammi le info su un corso
-- intent: course_ask
-  examples: |
-    - course available
-    - quali sono i corsi?
-    - corsi disponibili
-    - corsi
-    - che corsi ci sono
-    - quali corsi
-    - che corsi
-    - quali sono i corsi disponibili
 - intent: ask_remind
   examples: |
     - ricordami le lezioni

@@ -9,17 +9,18 @@ intents:
     trigger: action_set_reminder
 - affirm
 - course_access
-- course_ask
 - course_info
 - course_selected
-- course_selected_for_lessons
 - deny
 - greet
 - lesson_selected
 - lessons_list
+- lesson_feedback_score
+- lesson_done
 entities:
 - lesson
 - course
+- feedback_score
 slots:
   course:
     type: text
@@ -33,6 +34,12 @@ slots:
     mappings:
     - type: from_entity
       entity: lesson
+  feedback_score:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: feedback_score
 responses:
   utter_goodbye:
   - text: Va bene, sono qui se ti serve aiuto!
@@ -49,14 +56,15 @@ responses:
       payload: /lessons_list
     - title: Informazioni su un corso
       payload: /course_info
-  utter_course_info_selection:
-  - text: Per quale corso vuoi ricevere informazioni?
   utter_please_rephrase:
   - text: Scusa! Sto ancora imparando e non ho capito, potresti ripetere?
+  utter_feedback_request:
+  - text: Come è stata la lezione, interessante? Divertente? Dammi un punteggio da 1 a 10
 actions:
 - action_get_course_info
 - action_get_courses_list
 - action_get_lessons_list
 - action_get_link
+- action_get_lesson_feedback
 - action_react_to_reminder
 - action_set_reminder
