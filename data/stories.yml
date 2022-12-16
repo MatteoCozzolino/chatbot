@@ -5,6 +5,7 @@ stories:
   steps:
   - intent: greet
   - action: utter_welcome
+  - action: action_get_time_left
   - action: utter_conversation_choices
 - story: utente vuole accedere ad un corso a cui è iscritto
   steps:

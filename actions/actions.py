@@ -208,14 +208,7 @@ class ActionGetLink(Action):
                 if instanceCourse != courseid:
                     DBConnectionHandler.closeConnection(self, connection)
                     dispatcher.utter_message(text = "Non ci sono più lezioni disponibili per questo corso, ottimo lavoro!")
-                    return []
-
-                #Estrae dati per inserire nella tabella course_moduls_completion la nuova lezione svolta
-                cursor.execute("SELECT id FROM mdl_course_modules WHERE instance = %s", (lessonid, ))
-                moduleid = cursor.fetchone()
-                cursor.execute("SELECT max(id) FROM mdl_course_modules_completion") 
-                maxid = cursor.fetchone()
-                cursor.execute("INSERT INTO mdl_course_modules_completion VALUES (%s,%s,%s,1,1,NULL,%s)", (int(''.join(map(str, maxid))) + 1 , int(''.join(map(str, moduleid))), int(''.join(map(str, userid))), datetime.timestamp(datetime.now())))       
+                    return [] 
             elif tracker.get_intent_of_latest_message() == "lesson_selected":
                 lessonid = tracker.get_slot('lesson')
                 cursor.execute("SELECT shortname FROM mdl_course WHERE id = (SELECT course FROM mdl_course_modules WHERE instance = " + lessonid + ")")
@@ -290,9 +283,84 @@ class ActionGetLessonFeedback(Action):
         lesson_feedback_score = tracker.get_slot('feedback_score')
         lessonid = tracker.get_slot('lesson')
 
-        #segna la lezione come completata
+        connection = DBConnectionHandler.connect(self)
+        cursor = connection.cursor(buffered = True)
+
+        cursor.execute("SELECT mdl_user.id FROM mdl_user WHERE mdl_user.username = %s", (username, ))
+        userid = cursor.fetchone()
+        cursor.execute("SELECT id FROM mdl_course_modules WHERE instance = %s", (lessonid, ))
+        moduleid = cursor.fetchone()
+        cursor.execute("SELECT max(id) FROM mdl_course_modules_completion") 
+        maxid = cursor.fetchone()
+        cursor.execute("INSERT INTO mdl_course_modules_completion VALUES (%s,%s,%s,1,1,NULL,%s)", (int(''.join(map(str, maxid))) + 1 , int(''.join(map(str, moduleid))), int(''.join(map(str, userid))), datetime.timestamp(datetime.now())))
 
         #memorizza il feedback score nel db
-        print(lesson_feedback_score, lessonid)
+        #in una tabella salva tuple del tipo: id, moduleid, feedback_score, userid, timestamp
+        #moduleid sarà usato per estrarre l'instance
+
+        DBConnectionHandler.closeConnection(self, connection)
+
+        return []
+
+class ActionGetTimeLeft(Action):
+
+    def name(self) -> Text:
+        return "action_get_time_left"
+
+    def run(self, dispatcher: CollectingDispatcher,
+        tracker: Tracker, 
+        domain: Dict[Text, Any],) -> List[Dict[Text, Any]]:
+
+        connection = DBConnectionHandler.connect(self)
+        cursor = connection.cursor(buffered=True)
+
+        cursor.execute("SELECT mdl_user.id FROM mdl_user WHERE mdl_user.username = %s", (username, ))
+        userid = cursor.fetchone()
+
+        cursor.execute("SELECT mdl_enrol.courseid FROM mdl_user_enrolments INNER JOIN mdl_enrol ON mdl_user_enrolments.enrolid = mdl_enrol.id WHERE mdl_user_enrolments.userid = (SELECT mdl_user.id FROM mdl_user WHERE mdl_user.username = %s)", (username, ))
+        courseIDs = cursor.fetchall()
+
+        cursor.execute("SELECT mdl_course_completions.course FROM mdl_course_completions WHERE mdl_course_completions.userid = (SELECT mdl_user.id FROM mdl_user WHERE mdl_user.username = %s)", (username, ))
+        coursesCompleted = cursor.fetchall()
+
+        if len(coursesCompleted) > 0:
+            for j in coursesCompleted:
+                if courseIDs.count(j) > 0:
+                    courseIDs.remove(j)
+
+        #Ad ogni courseID viene associato il timestamp relativo all'iscrizione al corso
+        coursesTimeStartDict = dict()
+        for j in courseIDs:
+            cursor.execute("SELECT timestart FROM mdl_user_enrolments INNER JOIN mdl_enrol ON mdl_user_enrolments.enrolid = mdl_enrol.id WHERE userid = " + ''.join(map(str, userid)) + " AND courseid = %s", (str(j[0]),))
+            timestart = cursor.fetchone()
+            coursesTimeStartDict[j[0]] = int(''.join(map(str, timestart)))
+
+        dictKeys = coursesTimeStartDict.keys()
+        coursesTimeData = dict()
+        for i in dictKeys:
+            cursor.execute("SELECT startdate FROM mdl_course WHERE id = "+ str(i) +"")
+            startdate = cursor.fetchone()
+            cursor.execute("SELECT enddate FROM mdl_course WHERE id = "+ str(i) +"")
+            enddate = cursor.fetchone()
+            courseDuration = int(''.join(map(str, enddate))) - int(''.join(map(str, startdate)))
+            endCourse = courseDuration + coursesTimeStartDict[i]   #La data della fine del corso
+            currentTime = datetime.timestamp(datetime.now())
+            timeLeft = endCourse - currentTime
+
+            cursor.execute ("SELECT shortname FROM mdl_course WHERE id = "+ str(i) +"")
+            courseName = "".join(cursor.fetchone())
+
+            coursesTimeData[i] = [courseName, timeLeft]
+
+        DBConnectionHandler.closeConnection(self, connection)
+
+        message = "Ricordati che c'è un tempo limite per i corsi, ecco un aggiornamento per te:"
+        for i in dictKeys:
+            weeks = (coursesTimeData[i])[1]//604800
+            days = ((coursesTimeData[i])[1] - weeks*604800)//86400
+            hours = (((coursesTimeData[i])[1] - weeks*604800) - days*86400)//3600
+            message = message + ("\nDel corso " + (coursesTimeData[i])[0] + " hai ancora " + str(int(weeks)) + " settimane, " + str(int(days)) + " giorni e " + str(int(hours)) + " ore. ")
+
+        dispatcher.utter_message(text = message + "\nPer vedere la data di fine dei corsi ed altre informazioni fai click sul pulsante qui sotto sulla destra!")
 
         return []

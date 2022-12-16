@@ -103,9 +103,15 @@ nlu:
     - info corsi
     - dammi le info
     - dammi le info su un corso
+- intent: time_left
+  examples: |
+    - ricordami il tempo rimasto
+    - ricordami il tempo rimasto per finire i corsi
+    - tempo corsi
+    - quanto tempo ho ancora
+    - tempo
 - intent: ask_remind
   examples: |
     - ricordami le lezioni
-    - ricordami
     - ricordami di finire
     - ricordami di finire le lezioni

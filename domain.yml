@@ -17,6 +17,7 @@ intents:
 - lessons_list
 - lesson_feedback_score
 - lesson_done
+- time_left
 entities:
 - lesson
 - course
@@ -66,5 +67,6 @@ actions:
 - action_get_lessons_list
 - action_get_link
 - action_get_lesson_feedback
+- action_get_time_left
 - action_react_to_reminder
 - action_set_reminder

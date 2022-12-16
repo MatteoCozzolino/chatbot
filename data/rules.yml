@@ -16,6 +16,11 @@ rules:
   - intent: nlu_fallback
   - action: utter_please_rephrase
 
+- rule: L'utente chiede al bot di ricordargli il tempo rimasto per completare i corsi
+  steps:
+  - intent: time_left
+  - action: action_get_time_left
+
 - rule: Programma un reminder
   steps:
   - intent: ask_remind
