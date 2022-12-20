@@ -54,13 +54,10 @@ nlu:
     - lessons_list
     - lez
     - inviami le lezioni
-    - dammi gli esercizi
-    - dammi le lezioni
     - che lezioni
     - lezione
     - voglio ripassare una lezione
     - ripasso
-    - dammi la lista delle lezioni
     - lista lezioni
     - lezioni
 - intent: lesson_selected
@@ -72,27 +69,26 @@ nlu:
     - [61]{"entity": "lesson"}
 - intent: lesson_done
   examples: |
-    - ho finito
+    - ho finito e preso [10]{"entity": "mark"}
+    - ho finito e preso [perfetto]{"entity": "mark"}
+    - ho finito e preso [sufficiente]{"entity": "mark"}
+    - ho finito e preso [insufficiente]{"entity": "mark"}
     - finito
     - basta
     - ultimato
     - completato
-    - ho finito la lezione
-    - ho finito il corso
-    - ho fatto l'esercizio
+    - ho finito la lezione e preso [7]{"entity": "mark"}
+    - ho finito il corso con un voto di [5]{"entity": "mark"}
+    - ho fatto l'esercizio e preso [ottimo]{"entity": "mark"}
+    - ho fatto l'esercizio e preso [buono]{"entity": "mark"}
+    - ho fatto l'esercizio e preso [male]{"entity": "mark"}
+    - ho fatto l'esercizio e preso [pessimo]{"entity": "mark"}
     - ho fatto
 - intent: lesson_feedback_score
   examples: |
-    - [1]{"entity": "feedback_score"}
-    - [2]{"entity": "feedback_score"}
-    - [3]{"entity": "feedback_score"}
-    - [4]{"entity": "feedback_score"}
-    - [5]{"entity": "feedback_score"}
-    - [6]{"entity": "feedback_score"}
-    - [7]{"entity": "feedback_score"}
-    - [8]{"entity": "feedback_score"}
-    - [9]{"entity": "feedback_score"}
-    - [10]{"entity": "feedback_score"}
+    - [brutto]{"entity": "feedback_score"}
+    - [bello]{"entity": "feedback_score"}
+    - [medio]{"entity": "feedback_score"}
 - intent: course_info
   examples: |
     - course_info

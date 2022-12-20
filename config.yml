@@ -28,6 +28,9 @@ pipeline:
    - name: FallbackClassifier
      threshold: 0.4
      ambiguity_threshold: 0.1
+   - name: "SpacyNLP"
+     model: "it_core_news_md"
+     case_sensitive: False
 
 # Configuration for Rasa Core.
 # https://rasa.com/docs/rasa/core/policies/
@@ -36,12 +39,12 @@ policies:
 # # If you'd like to customize them, uncomment and adjust the policies.
 # # See https://rasa.com/docs/rasa/policies for more information.
    - name: MemoizationPolicy
-     max_history: 9
+     max_history: 10
    - name: RulePolicy
    - name: UnexpecTEDIntentPolicy
-     max_history: 9
+     max_history: 10
      epochs: 100
    - name: TEDPolicy
-     max_history: 9
+     max_history: 10
      epochs: 100
      constrain_similarities: true

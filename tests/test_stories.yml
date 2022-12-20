@@ -8,6 +8,7 @@ stories:
       ciao
     intent: greet
   - action: utter_welcome
+  - action: action_get_time_left
   - action: utter_conversation_choices
 
 - story: utente vuole accedere ad un corso di sua conoscenza
@@ -20,6 +21,12 @@ stories:
       [code 1]{"entity": "course"}
     intent: course_selected
   - action: action_get_link
+  - user: |
+      ho finito e ho preso 8
+  - action: utter_feedback_request
+  - user: |
+      [brutto]{"entity": "feedback_score"}
+  - action: action_get_lesson_feedback
   - action: utter_choices_fallback
 
 - story: utente vuole accedere ad un corso di sua conoscenza
@@ -31,6 +38,12 @@ stories:
       [code 1]{"entity": "course"}
     intent: course_selected
   - action: action_get_link
+  - user: |
+      ho finito e ho preso 8
+  - action: utter_feedback_request
+  - user: |
+      [medio]{"entity": "feedback_score"}
+  - action: action_get_lesson_feedback
   - action: utter_choices_fallback
 
 - story: utente vuole accedere ad un corso di sua conoscenza con un input inaspettato
@@ -42,6 +55,7 @@ stories:
       yo
     intent: greet
   - action: utter_welcome
+  - action: action_get_time_left
   - action: utter_conversation_choices
   - user: /course_access
     intent: course_access
@@ -50,6 +64,12 @@ stories:
       [code 1]{"entity": "course"}
     intent: course_selected
   - action: action_get_link
+  - user: |
+      ho finito e ho preso 8
+  - action: utter_feedback_request
+  - user: |
+      [bello]{"entity": "feedback_score"}
+  - action: action_get_lesson_feedback
   - action: utter_choices_fallback
 
 - story: utente vuole accedere ad un corso di sua conoscenza con un due input inaspettato
@@ -61,11 +81,13 @@ stories:
       yo
     intent: greet
   - action: utter_welcome
+  - action: action_get_time_left
   - action: utter_conversation_choices
   - user: |
       yo
     intent: greet
   - action: utter_welcome
+  - action: action_get_time_left
   - action: utter_conversation_choices
   - user: /course_access
     intent: course_access
@@ -74,6 +96,12 @@ stories:
       [code 1]{"entity": "course"}
     intent: course_selected
   - action: action_get_link
+  - user: |
+      ho finito e ho preso 8
+  - action: utter_feedback_request
+  - user: |
+      [medio]{"entity": "feedback_score"}
+  - action: action_get_lesson_feedback
   - action: utter_choices_fallback
 
 - story: utente vuole accedere ad un corso di sua conoscenza ma poi cambia idea
@@ -95,11 +123,13 @@ stories:
       yo
     intent: greet
   - action: utter_welcome
+  - action: action_get_time_left
   - action: utter_conversation_choices
   - user: |
       yo
     intent: greet
   - action: utter_welcome
+  - action: action_get_time_left
   - action: utter_conversation_choices
   - user: |
       no grazie
@@ -114,7 +144,7 @@ stories:
   - action: action_get_courses_list
   - user: |
       [code 1]{"entity": "course"}
-    intent: course_selected_for_lessons
+    intent: course_selected
   - action: action_get_lessons_list
   - user: |
       [17]{"entity": "lesson"}
@@ -129,7 +159,7 @@ stories:
   - action: action_get_courses_list
   - user: |
       [code 1]{"entity": "course"}
-    intent: course_selected_for_lessons
+    intent: course_selected
   - action: action_get_lessons_list
   - user: |
       [17]{"entity": "lesson"}
@@ -151,7 +181,7 @@ stories:
   - action: action_get_courses_list
   - user: |
       [code 1]{"entity": "course"}
-    intent: course_selected_for_lessons
+    intent: course_selected
   - action: action_get_lessons_list
   - user: |
       [17]{"entity": "lesson"}
@@ -189,7 +219,7 @@ stories:
   - user: |
       info corsi
     intent: course_info
-  - action: utter_course_info_selection
+  - action: action_get_courses_list
   - user: |
       [code 1]{"entity": "course"}
     intent: course_selected
@@ -200,11 +230,7 @@ stories:
   steps:
   - user: /course_info
     intent: course_info
-  - action: utter_course_info_selection
-  - user: |
-      che corsi ci sono
-    intent: course_ask
-  - action: action_get_courses_enrolled
+  - action: action_get_courses_list
   - user: |
       [code 1]{"entity": "course"}
     intent: course_selected
@@ -215,23 +241,16 @@ stories:
   steps:
   - user: /course_info
     intent: course_info
-  - action: utter_course_info_selection
-  - user: |
-      che corsi ci sono
-    intent: course_ask
-  - action: action_get_courses_enrolled
+  - action: action_get_courses_list
   - user: |
       yo
     intent: greet
   - action: utter_welcome
+  - action: action_get_time_left
   - action: utter_conversation_choices
   - user: /course_info
     intent: course_info
-  - action: utter_course_info_selection
-  - user: |
-      che corsi ci sono
-    intent: course_ask
-  - action: action_get_courses_enrolled
+  - action: action_get_courses_list
   - user: |
       [code 1]{"entity": "course"}
     intent: course_selected
@@ -242,15 +261,12 @@ stories:
   steps:
   - user: /course_info
     intent: course_info
-  - action: utter_course_info_selection
-  - user: |
-      che corsi ci sono
-    intent: course_ask
-  - action: action_get_courses_enrolled
+  - action: action_get_courses_list
   - user: |
       yo
     intent: greet
   - action: utter_welcome
+  - action: action_get_time_left
   - action: utter_conversation_choices
   - user: |
       no
@@ -264,7 +280,7 @@ stories:
   - action: action_get_courses_list
   - user: |
       [code 1]{"entity": "course"}
-    intent: course_selected_for_lessons
+    intent: course_selected
   - action: action_get_lessons_list
   - user: |
       [17]{"entity": "lesson"}
@@ -282,11 +298,13 @@ stories:
       yo
     intent: greet
   - action: utter_welcome
+  - action: action_get_time_left
   - action: utter_conversation_choices
   - user: |
       yo
     intent: greet
   - action: utter_welcome
+  - action: action_get_time_left
   - action: utter_conversation_choices
   - user: |
       no grazie
@@ -308,7 +326,7 @@ stories:
   - action: action_get_courses_list
   - user: |
       [code 1]{"entity": "course"}
-    intent: course_selected_for_lessons
+    intent: course_selected
   - action: action_get_lessons_list
   - user: |
       [17]{"entity": "lesson"}

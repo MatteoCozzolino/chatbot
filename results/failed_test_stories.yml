@@ -1,0 +1,136 @@
+version: "3.1"
+stories:
+- story: utente vuole sapere quali lezioni ha svolto ma poi vuole accedere ad un corso (.\tests\test_stories.yml)
+  steps:
+  - intent: lessons_list
+  - action: action_get_courses_list
+  - intent: course_access
+  - action: action_get_courses_list  # predicted: action_unlikely_intent
+  - intent: course_selected
+    entities:
+    - course: code 1
+  - slot_was_set:
+    - course: code 1
+  - action: action_get_link
+  - action: utter_choices_fallback  # predicted: action_listen
+- story: utente vuole sapere quali lezioni ha svolto e poi accedere ad un corso infine cambia idea (.\tests\test_stories.yml)
+  steps:
+  - intent: lessons_list
+  - action: action_get_courses_list
+  - intent: nlu_fallback  # predicted: greet: ghjkughukfgkfg
+  - action: utter_please_rephrase
+  - intent: lessons_list
+  - action: action_get_courses_list
+  - intent: course_selected
+    entities:
+    - course: code 1
+  - slot_was_set:
+    - course: code 1
+  - action: action_get_lessons_list
+  - intent: lesson_selected
+    entities:
+    - lesson: '17'
+  - slot_was_set:
+    - lesson: '17'
+  - action: action_get_link
+  - action: utter_choices_fallback
+- story: utente vuole accedere ad un corso di sua conoscenza (.\tests\test_stories.yml)
+  steps:
+  - intent: course_access
+  - action: action_get_courses_list
+  - intent: course_selected
+    entities:
+    - course: code 1
+  - slot_was_set:
+    - course: code 1
+  - action: action_get_link
+  - user: |-
+      ho finito e ho preso 8
+  - action: utter_feedback_request  # predicted: action_default_fallback
+  - entities:
+    - feedback_score: brutto
+    user: |-
+      [brutto](feedback_score)
+  - slot_was_set:
+    - feedback_score: brutto
+  - action: action_get_lesson_feedback  # predicted: action_default_fallback
+  - action: utter_choices_fallback
+- story: utente vuole accedere ad un corso di sua conoscenza (.\tests\test_stories.yml)
+  steps:
+  - intent: course_access
+  - action: action_get_courses_list
+  - intent: course_selected
+    entities:
+    - course: code 1
+  - slot_was_set:
+    - course: code 1
+  - action: action_get_link
+  - user: |-
+      ho finito e ho preso 8
+  - action: utter_feedback_request  # predicted: action_default_fallback
+  - entities:
+    - feedback_score: medio
+    user: |-
+      [medio](feedback_score)
+  - slot_was_set:
+    - feedback_score: medio
+  - action: action_get_lesson_feedback  # predicted: action_default_fallback
+  - action: utter_choices_fallback
+- story: utente vuole accedere ad un corso di sua conoscenza con un input inaspettato (.\tests\test_stories.yml)
+  steps:
+  - intent: course_access
+  - action: action_get_courses_list
+  - intent: greet
+  - action: utter_welcome  # predicted: action_unlikely_intent
+  - action: action_get_time_left
+  - action: utter_conversation_choices
+  - intent: course_access
+  - action: action_get_courses_list
+  - intent: course_selected
+    entities:
+    - course: code 1
+  - slot_was_set:
+    - course: code 1
+  - action: action_get_link
+  - user: |-
+      ho finito e ho preso 8
+  - action: utter_feedback_request  # predicted: action_default_fallback
+  - entities:
+    - feedback_score: bello
+    user: |-
+      [bello](feedback_score)
+  - slot_was_set:
+    - feedback_score: bello
+  - action: action_get_lesson_feedback  # predicted: action_default_fallback
+  - action: utter_choices_fallback
+- story: utente vuole accedere ad un corso di sua conoscenza con un due input inaspettato (.\tests\test_stories.yml)
+  steps:
+  - intent: course_access
+  - action: action_get_courses_list
+  - intent: greet
+  - action: utter_welcome  # predicted: action_unlikely_intent
+  - action: action_get_time_left
+  - action: utter_conversation_choices
+  - intent: greet
+  - action: utter_welcome
+  - action: action_get_time_left
+  - action: utter_conversation_choices
+  - intent: course_access
+  - action: action_get_courses_list
+  - intent: course_selected
+    entities:
+    - course: code 1
+  - slot_was_set:
+    - course: code 1
+  - action: action_get_link
+  - user: |-
+      ho finito e ho preso 8
+  - action: utter_feedback_request  # predicted: action_default_fallback
+  - entities:
+    - feedback_score: medio
+    user: |-
+      [medio](feedback_score)
+  - slot_was_set:
+    - feedback_score: medio
+  - action: action_get_lesson_feedback  # predicted: action_default_fallback
+  - action: utter_choices_fallback

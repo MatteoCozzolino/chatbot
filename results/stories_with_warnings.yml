@@ -1,0 +1,74 @@
+version: "3.1"
+stories:
+- story: utente vuole sapere quali lezioni ha svolto e poi accedere ad un corso infine cambia idea (.\tests\test_stories.yml)
+  steps:
+  - intent: lessons_list
+  - action: action_get_courses_list
+  - intent: course_selected
+    entities:
+    - course: code 1
+  - slot_was_set:
+    - course: code 1
+  - action: action_get_lessons_list
+  - intent: lesson_selected
+    entities:
+    - lesson: '17'
+  - slot_was_set:
+    - lesson: '17'
+  - action: action_get_link
+  - action: utter_choices_fallback
+  - intent: affirm
+  - action: utter_conversation_choices
+  - intent: course_access
+  - action: action_get_courses_list
+  - intent: greet
+  - action: utter_welcome  # predicted: action_unlikely_intent
+  - action: action_get_time_left
+  - action: utter_conversation_choices
+  - intent: greet
+  - action: utter_welcome
+  - action: action_get_time_left
+  - action: utter_conversation_choices
+  - intent: deny
+  - action: utter_goodbye
+- story: utente vuole accedere ad un corso di sua conoscenza con un due input inaspettato e poi chiude la conversazione (.\tests\test_stories.yml)
+  steps:
+  - intent: course_access
+  - action: action_get_courses_list
+  - intent: greet
+  - action: utter_welcome  # predicted: action_unlikely_intent
+  - action: action_get_time_left
+  - action: utter_conversation_choices
+  - intent: greet
+  - action: utter_welcome
+  - action: action_get_time_left
+  - action: utter_conversation_choices
+  - intent: deny
+  - action: utter_goodbye
+- story: utente chiede info ma inserisce un input inaspettato (.\tests\test_stories.yml)
+  steps:
+  - intent: course_info
+  - action: action_get_courses_list
+  - intent: greet
+  - action: utter_welcome  # predicted: action_unlikely_intent
+  - action: action_get_time_left
+  - action: utter_conversation_choices
+  - intent: course_info
+  - action: action_get_courses_list
+  - intent: course_selected
+    entities:
+    - course: code 1
+  - slot_was_set:
+    - course: code 1
+  - action: action_get_course_info
+  - action: utter_choices_fallback
+- story: utente chiede info ma inserisce un input inaspettato e poi cambia idea (.\tests\test_stories.yml)
+  steps:
+  - intent: course_info
+  - action: action_get_courses_list
+  - intent: greet
+  - action: utter_welcome  # predicted: action_unlikely_intent
+  - action: action_get_time_left
+  - action: utter_conversation_choices
+  - intent: deny
+  - action: utter_goodbye

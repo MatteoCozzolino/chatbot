@@ -1,0 +1,270 @@
+[
+  {
+    "text": "code 1",
+    "entities": [
+      {
+        "start": 0,
+        "end": 6,
+        "value": "code 1",
+        "entity": "course"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "17",
+    "entities": [
+      {
+        "start": 0,
+        "end": 2,
+        "value": "17",
+        "entity": "lesson"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "code 1",
+    "entities": [
+      {
+        "start": 0,
+        "end": 6,
+        "value": "code 1",
+        "entity": "course"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "code 1",
+    "entities": [
+      {
+        "start": 0,
+        "end": 6,
+        "value": "code 1",
+        "entity": "course"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "code 1",
+    "entities": [
+      {
+        "start": 0,
+        "end": 6,
+        "value": "code 1",
+        "entity": "course"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "code 1",
+    "entities": [
+      {
+        "start": 0,
+        "end": 6,
+        "value": "code 1",
+        "entity": "course"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "code 1",
+    "entities": [
+      {
+        "start": 0,
+        "end": 6,
+        "value": "code 1",
+        "entity": "course"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "17",
+    "entities": [
+      {
+        "start": 0,
+        "end": 2,
+        "value": "17",
+        "entity": "lesson"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "code 1",
+    "entities": [
+      {
+        "start": 0,
+        "end": 6,
+        "value": "code 1",
+        "entity": "course"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "17",
+    "entities": [
+      {
+        "start": 0,
+        "end": 2,
+        "value": "17",
+        "entity": "lesson"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "code 1",
+    "entities": [
+      {
+        "start": 0,
+        "end": 6,
+        "value": "code 1",
+        "entity": "course"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "brutto",
+    "entities": [
+      {
+        "text": "brutto",
+        "start": 0,
+        "end": 6,
+        "entity": "feedback_score",
+        "value": "brutto"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "code 1",
+    "entities": [
+      {
+        "start": 0,
+        "end": 6,
+        "value": "code 1",
+        "entity": "course"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "medio",
+    "entities": [
+      {
+        "text": "medio",
+        "start": 0,
+        "end": 5,
+        "entity": "feedback_score",
+        "value": "medio"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "code 1",
+    "entities": [
+      {
+        "start": 0,
+        "end": 6,
+        "value": "code 1",
+        "entity": "course"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "bello",
+    "entities": [
+      {
+        "text": "bello",
+        "start": 0,
+        "end": 5,
+        "entity": "feedback_score",
+        "value": "bello"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "code 1",
+    "entities": [
+      {
+        "start": 0,
+        "end": 6,
+        "value": "code 1",
+        "entity": "course"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "medio",
+    "entities": [
+      {
+        "text": "medio",
+        "start": 0,
+        "end": 5,
+        "entity": "feedback_score",
+        "value": "medio"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "code 1",
+    "entities": [
+      {
+        "start": 0,
+        "end": 6,
+        "value": "code 1",
+        "entity": "course"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "17",
+    "entities": [
+      {
+        "start": 0,
+        "end": 2,
+        "value": "17",
+        "entity": "lesson"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "code 1",
+    "entities": [
+      {
+        "start": 0,
+        "end": 6,
+        "value": "code 1",
+        "entity": "course"
+      }
+    ],
+    "predicted_entities": []
+  },
+  {
+    "text": "17",
+    "entities": [
+      {
+        "start": 0,
+        "end": 2,
+        "value": "17",
+        "entity": "lesson"
+      }
+    ],
+    "predicted_entities": []
+  }
+]

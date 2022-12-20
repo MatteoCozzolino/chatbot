@@ -22,6 +22,7 @@ entities:
 - lesson
 - course
 - feedback_score
+- mark
 slots:
   course:
     type: text
@@ -41,6 +42,12 @@ slots:
     mappings:
     - type: from_entity
       entity: feedback_score
+  mark:
+    type: text
+    influence_conversation: false
+    mappings:
+    - type: from_entity
+      entity: mark
 responses:
   utter_goodbye:
   - text: Va bene, sono qui se ti serve aiuto!
@@ -60,7 +67,14 @@ responses:
   utter_please_rephrase:
   - text: Scusa! Sto ancora imparando e non ho capito, potresti ripetere?
   utter_feedback_request:
-  - text: Come è stata la lezione, interessante? Divertente? Dammi un punteggio da 1 a 10
+  - text: Come è stata la lezione, interessante? Divertente?
+    buttons:
+      - title: "😀"
+        payload: bello
+      - title: "😐"
+        payload: medio
+      - title: "🙁"
+        payload: brutto
 actions:
 - action_get_course_info
 - action_get_courses_list

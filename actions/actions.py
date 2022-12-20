@@ -223,11 +223,11 @@ class ActionGetLink(Action):
             DBConnectionHandler.closeConnection(self, connection)
 
             if tracker.get_intent_of_latest_message() == "course_selected":
-                dispatcher.utter_message(text = "Ecco il link alla lezione " + str(lessonName) + " " + "".join(course_link) + "\nDimmi quando hai finito :D")
+                dispatcher.utter_message(text = "Ecco il link alla lezione " + str(lessonName) + " " + "".join(course_link) + "\nDimmi quando hai finito e che voto hai preso 😀")
             elif tracker.get_intent_of_latest_message() == "lesson_selected":
                 dispatcher.utter_message(text = "Ecco il link alla lezione " + str(lessonName) + " " + "".join(course_link))
 
-            return [SlotSet("lesson", lessonid)]    #TODO controllare dopo che ActionGetFeedback è stata fatta
+            return [SlotSet("lesson", lessonid)]   
 
 class ActionSetReminder(Action):    #TODO aggiungere email reminder? quando un nuovo corso è assegnato allo studente il bot gli manda una mail
 
@@ -282,6 +282,7 @@ class ActionGetLessonFeedback(Action):
 
         lesson_feedback_score = tracker.get_slot('feedback_score')
         lessonid = tracker.get_slot('lesson')
+        mark = tracker.get_slot('mark') 
 
         connection = DBConnectionHandler.connect(self)
         cursor = connection.cursor(buffered = True)
@@ -295,7 +296,7 @@ class ActionGetLessonFeedback(Action):
         cursor.execute("INSERT INTO mdl_course_modules_completion VALUES (%s,%s,%s,1,1,NULL,%s)", (int(''.join(map(str, maxid))) + 1 , int(''.join(map(str, moduleid))), int(''.join(map(str, userid))), datetime.timestamp(datetime.now())))
 
         #memorizza il feedback score nel db
-        #in una tabella salva tuple del tipo: id, moduleid, feedback_score, userid, timestamp
+        #in una tabella salva tuple del tipo: id, moduleid, feedback_score, mark, userid, timestamp
         #moduleid sarà usato per estrarre l'instance
 
         DBConnectionHandler.closeConnection(self, connection)
