@@ -17,13 +17,13 @@ import { Icon } from "./Icons";
 
 const dropdownMenu = [
   {
-    title: "Restart",
+    title: "Ricomincia",
   },
   {
-    title: "Clear Chat",
+    title: "Pulisci Chat",
   },
   {
-    title: "Close",
+    title: "Chiudi",
   },
 ];
 
@@ -55,7 +55,7 @@ export const Header = () => {
     dispatch(removeAllMessages());
     dispatch(toggleBotTyping(false));
     dispatch(toggleUserTyping(true));
-    dispatch(setUserTypingPlaceholder("Type you message..."));
+    dispatch(setUserTypingPlaceholder("Scrivi il tuo messaggio..."));
     setShowDropdown(!showDropdown);
   };
   const handleRestartButton = () => {

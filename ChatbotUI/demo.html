@@ -19,11 +19,11 @@
     !(function () {
       let e = document.createElement("script"),
         t = document.head || document.getElementsByTagName("head")[0];
-      (e.src = "./dist/index.js"),
+      (e.src = "./src/index.js"),
         (e.async = !0),
         (e.onload = () => {
           window.ChatbotWidget.default({
-            rasaServerUrl: "http://localhost:5005/webhooks/rest/webhook",
+            rasaServerUrl: "http://34.175.196.33:5005/webhooks/rest/webhook",
             userId: "user",
             initialPayload: "/greet",
             metadata: {},

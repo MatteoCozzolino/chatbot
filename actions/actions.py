@@ -229,7 +229,7 @@ class ActionGetLink(Action):
 
             return [SlotSet("lesson", lessonid)]   
 
-class ActionSetReminder(Action):    #TODO aggiungere email reminder? quando un nuovo corso è assegnato allo studente il bot gli manda una mail
+class ActionSetReminder(Action):    
 
     def name(self) -> Text:
         return "action_set_reminder"
@@ -270,7 +270,6 @@ class ActionReactToReminder(Action):
 
         return []
 
-#TODO action che gestisce il feedback dell'utente sulla lezione appena fatta 
 class ActionGetLessonFeedback(Action):
 
     def name(self) -> Text:
@@ -281,6 +280,12 @@ class ActionGetLessonFeedback(Action):
         domain: Dict[Text, Any],) -> List[Dict[Text, Any]]:
 
         lesson_feedback_score = tracker.get_slot('feedback_score')
+        if lesson_feedback_score == "brutto":
+            normalized_feedback = 1
+        elif lesson_feedback_score == "medio":
+            normalized_feedback = 2
+        elif lesson_feedback_score == "bello":
+            normalized_feedback = 3
         lessonid = tracker.get_slot('lesson')
         mark = tracker.get_slot('mark') 
 
@@ -295,9 +300,17 @@ class ActionGetLessonFeedback(Action):
         maxid = cursor.fetchone()
         cursor.execute("INSERT INTO mdl_course_modules_completion VALUES (%s,%s,%s,1,1,NULL,%s)", (int(''.join(map(str, maxid))) + 1 , int(''.join(map(str, moduleid))), int(''.join(map(str, userid))), datetime.timestamp(datetime.now())))
 
-        #memorizza il feedback score nel db
-        #in una tabella salva tuple del tipo: id, moduleid, feedback_score, mark, userid, timestamp
-        #moduleid sarà usato per estrarre l'instance
+        #Tabella mdl_modules_feedback: id, moduleid, feedbackscore, mark, userid, timestamp
+        
+        cursor.execute("SELECT max(id) FROM mdl_modules_feedback") 
+        id = cursor.fetchone()
+    
+        if ''.join(map(str, id)) == "None":
+            currentid = 0
+        else:
+            currentid = int(''.join(map(str, id)))
+        
+        cursor.execute("INSERT INTO mdl_modules_feedback VALUES (%s,%s,%s,%s,%s,%s)", (currentid + 1 , int(''.join(map(str, moduleid))),  normalized_feedback,  mark, int(''.join(map(str, userid))), datetime.timestamp(datetime.now())))
 
         DBConnectionHandler.closeConnection(self, connection)
 
@@ -365,3 +378,4 @@ class ActionGetTimeLeft(Action):
         dispatcher.utter_message(text = message + "\nPer vedere la data di fine dei corsi ed altre informazioni fai click sul pulsante qui sotto sulla destra!")
 
         return []
+

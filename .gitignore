@@ -1,5 +1,4 @@
 .rasa/cache/
 *.pkl
-models/
 .DS_Store
 *.lnk

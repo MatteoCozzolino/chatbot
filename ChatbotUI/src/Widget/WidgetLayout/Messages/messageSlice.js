@@ -80,7 +80,7 @@ export const messagesSlice = createSlice({
     builder.addCase(fetchBotResponse.fulfilled, (state, action) => {
       state.botTyping = false;
       state.userTyping = true;
-      state.userTypingPlaceholder = "Type your message here...";
+      state.userTypingPlaceholder = "Scrivi qui il tuo messaggio...";
       const messages = action.payload;
       if (messages.length > 0) {
         for (let index = 0; index < messages.length; index += 1) {
