@@ -16,7 +16,7 @@ applicationSettings:
   debugMode: false
 
   # -- Initial model to download and load if a model server or remote storage is not used. It has to be a URL (without auth) that points to a tar.gz file
-  initialModel: "https://github.com/MatteoCozzolino/chatbot/blob/magistrale/models/20221222-143311-grim-garden.tar.gz?raw=true"
+  initialModel: "https://github.com/MatteoCozzolino/chatbot/blob/magistrale/models/20230112-173815-regional-period.tar?raw=true"
 
   # -- Train a model if an initial model is not defined. This parameter is ignored if the `applicationSettings.initialModel` is defined
   trainInitialModel: false
@@ -633,7 +633,7 @@ rasa-action-server:
     # -- Determine if external URL is used
     enabled: true
     # -- External URL to Rasa Action Server
-    url: "http://34.175.236.148:5055/webhook"
+    url: "http://34.175.234.215:5055/webhook"
 
 ## Settings for Duckling
 ## See: https://github.com/RasaHQ/helm-charts/tree/main/charts/duckling

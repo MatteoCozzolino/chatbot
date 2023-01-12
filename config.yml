@@ -39,12 +39,12 @@ policies:
 # # If you'd like to customize them, uncomment and adjust the policies.
 # # See https://rasa.com/docs/rasa/policies for more information.
    - name: MemoizationPolicy
-     max_history: 10
+     max_history: 9
    - name: RulePolicy
    - name: UnexpecTEDIntentPolicy
-     max_history: 10
+     max_history: 9
      epochs: 100
    - name: TEDPolicy
-     max_history: 10
+     max_history: 9
      epochs: 100
      constrain_similarities: true
